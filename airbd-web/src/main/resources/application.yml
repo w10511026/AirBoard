@@ -1,0 +1,33 @@
+server:
+  servlet:
+    context-path: /web
+  port: 8088
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+spring:
+  application:
+    name: AIRBD-WEB
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://115.28.28.90:3306/airboard?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 123456
+  jpa:
+    show-sql: true
+    hibernate:
+      naming:
+        #hibernate5.1版本后配置方式
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+
+####mybatis配置####
+mybatis:
+  config-locations: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  type-aliases-package: com.airboard.core.dto
