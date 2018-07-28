@@ -1,0 +1,29 @@
+package ${package.Service};
+
+import com.baomidou.mybatisplus.plugins.Page;
+import ${package.Entity}.${entity};
+import ${superServiceClassPackage};
+import com.dcy.model.BootStrapTable;
+
+import java.util.List;
+
+/**
+ * <p>
+ * $!{table.comment} 服务类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
+
+    /**
+     *  分页查询
+     * @param bootStrapTable
+     * @param ${table.entityPath}
+     * @return
+     */
+    Page<${entity}> selectPage(BootStrapTable<${entity}> bootStrapTable,${entity} ${table.entityPath});
+
+    List<AppCertificate> selectList(${entity} ${table.entityPath});
+}

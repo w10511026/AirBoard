@@ -1,7 +1,7 @@
 package com.airboard.core.service;
 
 
-import com.airboard.core.dto.Users;
+import com.airboard.core.model.Users;
 import com.airboard.core.base.BaseService;
 
 import java.util.List;

@@ -48,8 +48,8 @@ spring:
 mybatis:
   config-locations: classpath:mybatis/mybatis-config.xml
   mapper-locations: classpath:mybatis/mapper/*.xml
-  type-aliases-package: com.airboard.core.dto
+  type-aliases-package: com.airboard.core.model
 
 logging:
   config: classpath:logback-spring.xml
-  path: D:/airboard/api-log
+  path: D:/AIRBD-LOG/api-log

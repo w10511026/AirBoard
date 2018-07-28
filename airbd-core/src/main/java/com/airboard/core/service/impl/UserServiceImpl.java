@@ -1,7 +1,7 @@
 package com.airboard.core.service.impl;
 
 import com.airboard.core.annotation.RedisCache;
-import com.airboard.core.dto.Users;
+import com.airboard.core.model.Users;
 import com.airboard.core.service.UserService;
 import com.airboard.core.base.AbstractBaseService;
 import org.springframework.stereotype.Service;

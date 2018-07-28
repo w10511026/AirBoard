@@ -1,4 +1,4 @@
-package com.airboard.core.dto;
+package com.airboard.core.model;
 
 import com.airboard.core.base.BaseObject;
 import lombok.Data;

@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 @Data
-public abstract class BaseObject implements Serializable {
+public abstract class BaseObject<T> implements Serializable {
 
     private static final long serialVersionUID = -1245891341026451451L;
 

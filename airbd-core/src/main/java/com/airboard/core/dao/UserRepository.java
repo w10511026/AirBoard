@@ -1,6 +1,6 @@
 package com.airboard.core.dao;
 
-import com.airboard.core.dto.Users;
+import com.airboard.core.model.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

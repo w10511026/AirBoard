@@ -1,7 +1,7 @@
 package com.airboard.core;
 
 import com.airboard.core.dao.UserMapper;
-import com.airboard.core.dto.Users;
+import com.airboard.core.model.Users;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
