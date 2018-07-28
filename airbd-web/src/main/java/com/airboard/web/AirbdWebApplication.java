@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @EnableEurekaClient
 @SpringBootApplication
+@ComponentScan("com.airboard")
 @MapperScan("com.airboard.core.dao")
 public class AirbdWebApplication {
 

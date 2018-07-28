@@ -1,17 +1,18 @@
 package com.airboard.core.dto;
 
-import javax.persistence.*;
+import com.airboard.core.base.BaseObject;
+import lombok.Data;
+import lombok.ToString;
+
+import javax.persistence.Column;
 import java.io.Serializable;
 
-@Entity
-@Table(name = "users")
-public class Users implements Serializable {
+@Data
+@ToString
+public class Users extends BaseObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     @Column(nullable = false, unique = true)
     private String userName;
     @Column(nullable = false)
@@ -25,35 +26,6 @@ public class Users implements Serializable {
         super();
         this.passWord = passWord;
         this.userName = userName;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPassWord() {
-        return passWord;
-    }
-
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
-    }
-
-    @Override
-    public String toString() {
-        return "userName " + this.userName + ", pasword " + this.passWord;
     }
 
 }

@@ -1,7 +1,6 @@
 package com.airboard.core;
 
 import com.airboard.core.dao.UserMapper;
-import com.airboard.core.dao.UserRepository;
 import com.airboard.core.dto.Users;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,8 +14,8 @@ import java.util.List;
 @SpringBootTest
 public class AirbdCoreApplicationTests {
 
-    @Autowired
-    UserRepository userRepository;
+    //@Autowired
+    //UserRepository userRepository;
     @Autowired
     UserMapper userMapper;
 

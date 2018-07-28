@@ -1,7 +1,7 @@
 server:
   servlet:
-    context-path: /web
-  port: 8088
+    context-path: /api
+  port: 8089
 
 eureka:
   client:
@@ -10,7 +10,7 @@ eureka:
 
 spring:
   application:
-    name: AIRBD-WEB
+    name: AIRBD-API
   datasource:
     driverClassName: com.mysql.jdbc.Driver
     url: jdbc:mysql://47.106.15.76:3306/airboard?useUnicode=true&characterEncoding=utf-8&useSSL=false
@@ -52,4 +52,4 @@ mybatis:
 
 logging:
   config: classpath:logback-spring.xml
-  path: D:/airboard/web-log
+  path: D:/airboard/api-log
