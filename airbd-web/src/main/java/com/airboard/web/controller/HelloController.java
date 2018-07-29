@@ -2,6 +2,7 @@ package com.airboard.web.controller;
 
 import com.airboard.core.base.BaseController;
 import com.airboard.core.base.JedisTemplate;
+import com.airboard.core.dao.UserRepository;
 import com.airboard.core.model.Users;
 import com.airboard.core.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,8 @@ import java.util.List;
 public class HelloController extends BaseController {
 
     @Autowired
+    UserRepository userRepository;
+    @Autowired
     private UserService userService;
     @Autowired
     private JedisTemplate jedisTemplate;
@@ -38,7 +41,7 @@ public class HelloController extends BaseController {
 
     @GetMapping("/getAll")
     public String getAll() {
-        List<Users> all = userService.findAll();
+        List<Users> all = userRepository.findAll();
 
         //Users one = userService.getOne(2L);
         return all.toString();

@@ -1,28 +1,17 @@
 package com.airboard.core.base;
 
 import lombok.Data;
+import lombok.ToString;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Data
-public abstract class BaseObject<T> implements Serializable {
+@ToString
+@MappedSuperclass
+public class BaseObject<T> implements Serializable {
 
     private static final long serialVersionUID = -1245891341026451451L;
-
-    public static final String ID = "id";
-
-    public static final String CREATETIME = "createtime";
-
-    public static final String CREATEUSERID = "createuserid";
-
-    public static final String VERSION = "version";
-
-    public static final String UPDATETIME = "updatetime";
-
-    public static final String UPDATEUSERID = "updateuserid";
 
     /**
      * 主键id
@@ -33,22 +22,27 @@ public abstract class BaseObject<T> implements Serializable {
     /**
      * 版本
      */
+    @Column(name = "version")
     protected Integer version;
     /**
      * 创建时间
      */
+    @Column(name = "create_time")
     protected Long createTime;
     /**
      * 创建人
      */
+    @Column(name = "create_user_id")
     private Long createUserId;
     /**
      * 修改时间
      */
+    @Column(name = "update_time")
     protected Long updateTime;
     /**
      * 修改人
      */
+    @Column(name = "update_user_id")
     protected Long updateUserId;
 
     public BaseObject() {

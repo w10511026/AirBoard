@@ -22,7 +22,7 @@ public class MpGenerator {
     final static String DB_URL = "jdbc:mysql://47.106.15.76:3306/airboard?characterEncoding=utf8&useSSL=false";
     final static String DB_USERNAME = "root";
     final static String DB_PASSWORD = "Wangzong666.";
-    final static String OUT_DIR = "E://test//";
+    final static String OUT_DIR = "D://test//";
 
     public static void main(String[] args) {
         AutoGenerator mpg = new AutoGenerator();
@@ -60,7 +60,7 @@ public class MpGenerator {
                 return super.processTypeConvert(fieldType);
             }
         });
-        dsc.setDriverName("com.mysql.jdbc.Driver");
+        dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername(DB_USERNAME);
         dsc.setPassword(DB_PASSWORD);
         dsc.setUrl(DB_URL);
@@ -76,7 +76,7 @@ public class MpGenerator {
         // 自定义实体父类
         strategy.setSuperEntityClass("com.airboard.core.base.BaseObject");
         // 自定义实体，公共字段
-        // strategy.setSuperEntityColumns(new String[] { "test_id", "age" });
+        strategy.setSuperEntityColumns(new String[] { "id", "create_time", "create_user_id", "update_time", "update_user_id", "version" });
         // 自定义 mapper 父类
         // strategy.setSuperMapperClass("com.baomidou.demo.TestMapper");
         // 自定义 service 父类
