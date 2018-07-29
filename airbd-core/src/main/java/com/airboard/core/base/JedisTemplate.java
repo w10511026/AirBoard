@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description
+ * @Description REDIS通用方法类
  * @Author <a href="mailto:wangshuo@ebnew.com">Wangshuo</a>
  * @Date 2018/7/28
  */

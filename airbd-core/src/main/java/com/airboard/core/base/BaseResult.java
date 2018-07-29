@@ -8,11 +8,11 @@ import lombok.Setter;
 import java.io.Serializable;
 
 /**
- * @Description
+ * @Description 通用返回结果
  * @Author <a href="mailto:wangshuo@ebnew.com">Wangshuo</a>
  * @Date 2018/7/28
  */
-@ApiModel(description = "返回响应数据")
+@ApiModel(description = "通用返回结果")
 public class BaseResult<T> implements Serializable {
 
     private static final long serialVersionUID = 6732312763880543546L;

@@ -1,7 +1,7 @@
 package com.airboard.core.base;
 
+import com.airboard.core.util.NumberUtils;
 import com.alibaba.fastjson.JSON;
-import com.google.gson.Gson;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -14,12 +14,12 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 /**
- * @Description
+ * @Description MYBATIS抽象通用service
  * @Author <a href="mailto:wangshuo@ebnew.com">Wangshuo</a>
  * @Date 2018/7/26
  */
 @Slf4j
-public abstract class AbstractBaseService<T extends BaseObject, ID extends Serializable> implements BaseService<T, ID> {
+public abstract class AbstractBaseMapperService<T extends BaseObject, ID extends Serializable> implements BaseMapperService<T, ID> {
 
     @Autowired
     JedisTemplate jedisTemplate;
@@ -41,7 +41,7 @@ public abstract class AbstractBaseService<T extends BaseObject, ID extends Seria
     }
 
     @Override
-    public List<T> findAll() {
+    public List<T> listAll() {
         String key = getClz().getName() + REDIS_LIST_KEY;
         String json = jedisTemplate.get(key);
         if (StringUtils.isNotEmpty(json)) {
@@ -55,25 +55,24 @@ public abstract class AbstractBaseService<T extends BaseObject, ID extends Seria
     }
 
     @Override
-    public T getOne(ID id) {
+    public T getById(ID id) {
         String key = getClz().getName() + id;
         if (id == null) {
             return null;
         }
-        Gson gson = new Gson();
         String json = this.jedisTemplate.get(key);
         if (json != null) {
-            return gson.fromJson(json, getClz());
+            return JSON.parseObject(json, getClz());
         }
         T t = this.getBaseMapper().getOne(id);
         if (t != null) {
-            this.jedisTemplate.set(key, gson.toJson(t), 0);
+            this.jedisTemplate.set(key, JSON.toJSONString(t), 0);
         }
         return t;
     }
 
     @Override
-    public void insert(T t) {
+    public void save(T t) {
         if (t == null) {
             log.info("待插入的实体为null，class:{}", this.getClz().getName());
             return;
@@ -93,7 +92,22 @@ public abstract class AbstractBaseService<T extends BaseObject, ID extends Seria
     }
 
     @Override
-    public void delete(ID id) {
+    public void saveOrUpdate(T t) {
+        if (t == null) {
+            log.info("待插入的实体为null，class:{}", this.getClz().getName());
+            return;
+        }
+        if (NumberUtils.isEmpty(t.getId())) {
+            this.getBaseMapper().insert(t);
+        } else {
+            this.getBaseMapper().update(t);
+            String key = getClz().getName() + t.getId();
+            this.jedisTemplate.delKey(key);
+        }
+    }
+
+    @Override
+    public void deleteById(ID id) {
         if (id == null) {
             return;
         }

@@ -3,12 +3,12 @@
 <mapper namespace="com.airboard.core.dao.UserMapper" >
     <resultMap id="BaseResultMap" type="com.airboard.core.model.Users" >
         <id column="id" property="id" jdbcType="BIGINT" />
-        <result column="userName" property="userName" jdbcType="VARCHAR" />
-        <result column="passWord" property="passWord" jdbcType="VARCHAR" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+        <result column="pass_word" property="passWord" jdbcType="VARCHAR" />
     </resultMap>
     
     <sql id="Base_Column_List" >
-        id, userName, passWord
+        id, user_name, pass_word
     </sql>
 
     <select id="findAll" resultMap="BaseResultMap"  >
@@ -27,7 +27,7 @@
     <insert id="insert" parameterType="com.airboard.core.model.Users" >
        INSERT INTO 
        		users
-       		(userName,passWord)
+       		(user_name,pass_word)
        	VALUES
        		(#{userName}, #{passWord})
     </insert>
@@ -36,8 +36,8 @@
        UPDATE 
        		users 
        SET 
-       	<if test="userName != null">userName = #{userName},</if>
-       	<if test="passWord != null">passWord = #{passWord}</if>
+       	<if test="userName != null">user_name = #{userName},</if>
+       	<if test="passWord != null">pass_word = #{passWord}</if>
        WHERE
        		id = #{id}
     </update>

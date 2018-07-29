@@ -1,35 +1,33 @@
 package com.airboard.core.model;
 
-import com.airboard.core.base.BaseObject;
-import lombok.Data;
-import lombok.ToString;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.io.Serializable;
+import com.airboard.core.base.BaseObject;
+import javax.persistence.*;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
+/**
+ * @Description:
+ * @author Wangshuo123
+ * @since 2018-07-29
+ */
 @Data
-@ToString
+@Accessors(chain = true)
 @Entity
 @Table(name = "users")
-public class Users extends BaseObject implements Serializable {
+public class Users extends BaseObject<Users> {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "user_name")
     private String userName;
-    @Column(nullable = false)
+    @Column(name = "pass_word")
     private String passWord;
 
-    public Users() {
-        super();
-    }
 
-    public Users(String userName, String passWord) {
-        super();
-        this.passWord = passWord;
-        this.userName = userName;
+    @Override
+    protected Serializable pkVal() {
+        return this.id;
     }
 
 }

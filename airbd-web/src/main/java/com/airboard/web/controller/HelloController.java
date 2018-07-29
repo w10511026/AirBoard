@@ -1,10 +1,11 @@
 package com.airboard.web.controller;
 
 import com.airboard.core.base.BaseController;
+import com.airboard.core.base.BaseResult;
 import com.airboard.core.base.JedisTemplate;
-import com.airboard.core.dao.UserRepository;
 import com.airboard.core.model.Users;
-import com.airboard.core.service.UserService;
+import com.airboard.core.service.UserMapperService;
+import com.airboard.core.service.UserRepositoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,13 +23,13 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/")
 public class HelloController extends BaseController {
 
     @Autowired
-    UserRepository userRepository;
+    UserRepositoryService userRepositoryService;
     @Autowired
-    private UserService userService;
+    private UserMapperService userMapperService;
     @Autowired
     private JedisTemplate jedisTemplate;
 
@@ -39,11 +40,25 @@ public class HelloController extends BaseController {
         return ws.toString();
     }
 
-    @GetMapping("/getAll")
-    public String getAll() {
-        List<Users> all = userRepository.findAll();
+    @GetMapping("/index")
+    public String index() {
+        return "index";
+    }
 
-        //Users one = userService.getOne(2L);
-        return all.toString();
+    @GetMapping("/getAll")
+    public BaseResult getAll() {
+        BaseResult baseResult = new BaseResult();
+        try {
+            List<Users> all = userRepositoryService.listAll();
+            Users users = new Users();
+            users.setUserName("laowang");
+            users.setPassWord("wangshuo");
+            userRepositoryService.save(users);
+            Users one = userMapperService.getById(2L);
+            baseResult.setData(all);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return baseResult;
     }
 }

@@ -2,17 +2,11 @@ package ${package.Entity};
 
 #if(${activeRecord})
 import java.io.Serializable;
-
-#end
-#foreach($pkg in ${table.importPackages})
-import ${pkg};
 #end
 #if(${entityLombokModel})
-
-import com.baomidou.mybatisplus.annotations.Version;
-
+import com.airboard.core.base.BaseObject;
+import javax.persistence.*;
 import lombok.Data;
-import lombok.ToString;
 import lombok.experimental.Accessors;
 #end
 
@@ -23,8 +17,9 @@ import lombok.experimental.Accessors;
  */
 #if(${entityLombokModel})
 @Data
-@ToString
 @Accessors(chain = true)
+@Entity
+@Table(name = "${table.name}")
 #end
 #if(${table.convert})
 @TableName("${table.name}")
@@ -65,7 +60,7 @@ public class ${entity} implements Serializable {
    @TableField(fill = FieldFill.${field.fill})
 #end
 #elseif(${field.convert})
-   @TableField("${field.name}")
+   @Column(name = "${field.name}")
 #end
 ## 乐观锁注解
 #if(${versionFieldName}==${field.name})

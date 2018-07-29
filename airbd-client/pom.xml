@@ -15,6 +15,7 @@
         <groupId>com.airboard</groupId>
         <artifactId>airbd-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../airbd-parent</relativePath>
     </parent>
 
     <dependencies>

@@ -43,8 +43,8 @@ public class MpGenerator {
         // 自定义文件命名，注意 %s 会自动填充表实体属性！
         // gc.setMapperName("%sDao");
         // gc.setXmlName("%sDao");
-        // gc.setServiceName("MP%sService");
-        // gc.setServiceImplName("%sServiceDiy");
+        gc.setServiceName("%sMapperService");
+        gc.setServiceImplName("%sMapperServiceImpl");
         // gc.setControllerName("%sAction");
         mpg.setGlobalConfig(gc);
 
@@ -78,11 +78,11 @@ public class MpGenerator {
         // 自定义实体，公共字段
         strategy.setSuperEntityColumns(new String[] { "id", "create_time", "create_user_id", "update_time", "update_user_id", "version" });
         // 自定义 mapper 父类
-        // strategy.setSuperMapperClass("com.baomidou.demo.TestMapper");
+        strategy.setSuperMapperClass("com.airboard.core.base.BaseMapper");
         // 自定义 service 父类
-        // strategy.setSuperServiceClass("com.baomidou.demo.TestService");
+        strategy.setSuperServiceClass("com.airboard.core.base.BaseMapperService");
         // 自定义 service 实现类父类
-        // strategy.setSuperServiceImplClass("com.baomidou.demo.TestServiceImpl");
+        strategy.setSuperServiceImplClass("com.airboard.core.base.AbstractBaseMapperService");
         // 自定义 controller 父类
         strategy.setSuperControllerClass("com.airboard.core.base.BaseController");
         // 【实体】是否生成字段常量（默认 false）
@@ -106,6 +106,7 @@ public class MpGenerator {
         pc.setEntity("core.model");
         pc.setService("core.service");
         pc.setServiceImpl("core.service.impl");
+        pc.setMapper("core.dao");
         pc.setXml("mybatis.mapper");
         mpg.setPackageInfo(pc);
 

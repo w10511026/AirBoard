@@ -9,10 +9,10 @@ import java.util.Random;
 
 public class PingYinUtil {
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		String str = "这是一个测试";
 		System.out.println("中文首字母：" + getPYIndexStr(str, true));
-	}
+	}*/
 
 	/**
 	 * 返回首字母

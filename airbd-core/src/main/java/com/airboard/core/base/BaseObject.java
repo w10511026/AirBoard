@@ -2,6 +2,8 @@ package com.airboard.core.base;
 
 import lombok.Data;
 import lombok.ToString;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -9,7 +11,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @MappedSuperclass
-public class BaseObject<T> implements Serializable {
+public abstract class BaseObject<T> implements Serializable {
 
     private static final long serialVersionUID = -1245891341026451451L;
 
@@ -17,11 +19,13 @@ public class BaseObject<T> implements Serializable {
      * 主键id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "idGenerator")
+    @GenericGenerator(name = "idGenerator", strategy = "com.airboard.core.base.IdGeneratorStrategy")
     protected Long id;
     /**
      * 版本
      */
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "version")
     protected Integer version;
     /**
@@ -46,6 +50,7 @@ public class BaseObject<T> implements Serializable {
     protected Long updateUserId;
 
     public BaseObject() {
+        this.createTime = System.currentTimeMillis();
     }
 
     public BaseObject(Long id, Long createTime, Long createUserId) {
@@ -54,4 +59,6 @@ public class BaseObject<T> implements Serializable {
         this.createTime = createTime;
         this.createUserId = createUserId;
     }
+
+    protected abstract Serializable pkVal();
 }
