@@ -11,6 +11,14 @@ eureka:
 spring:
   application:
     name: AIRBD-WEB
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    servlet.content-type: text/html
+    #关闭缓存，即时刷新，上线生产环境需改成true
+    cache: false
   datasource:
     driverClassName: com.mysql.jdbc.Driver
     url: jdbc:mysql://47.106.15.76:3306/airboard?useUnicode=true&characterEncoding=utf-8&useSSL=false
