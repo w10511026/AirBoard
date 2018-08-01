@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 /**
  * @Description
  * @Author <a href="mailto:wangshuo@ebnew.com">Wangshuo</a>
@@ -31,7 +34,7 @@ public class LoginController extends BaseController {
 
     @ResponseBody
     @PostMapping("/login")
-    public BaseResult loginUser(UserVO userVO) {
+    public BaseResult login(UserVO userVO) {
         if (StringUtils.isEmpty(userVO.getUserName())) {
             return new BaseResult("用户名不能为空！");
         }
@@ -39,5 +42,12 @@ public class LoginController extends BaseController {
             return new BaseResult("用户名不能为空！");
         }
         return new BaseResult(true);
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.invalidate();
+        return "login";
     }
 }
