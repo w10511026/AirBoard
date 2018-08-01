@@ -33,7 +33,6 @@ public class AirbdWebApplication implements WebMvcConfigurer {
         SpringApplication.run(AirbdWebApplication.class, args);
     }
 
-
     //将Spring MVC中默认的Jackson替换为fastjson
     @Bean
     public HttpMessageConverters fastJsonHttpMessageConverter() {
