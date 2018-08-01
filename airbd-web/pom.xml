@@ -33,7 +33,12 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -84,8 +89,19 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <excludes>
+                    <exclude>**/*.woff</exclude>
+                    <exclude>**/*.woff2</exclude>
+                    <exclude>**/*.ttf</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
                 <includes>
-                    <include>**/*.*</include>
+                    <include>**/*.woff</include>
+                    <include>**/*.woff2</include>
+                    <include>**/*.ttf</include>
                 </includes>
             </resource>
         </resources>
