@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface UserRepositoryService extends BaseRepositoryService<Users, Long> {
 
-    List<Users> getUserList();
+    List<Users> getByUserName(String name);
+
 }

@@ -15,17 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-
-/**
- * @Description </br>
- * @Version Ver 1.0
- * @Author <a href="mailto:wangshuo@ebnew.com">Wangshuo</a>
- * @Date 2018/6/26
- */
 @Slf4j
 @Controller
-@RequestMapping("/")
-public class HelloController extends BaseController {
+@RequestMapping("/index")
+public class IndexController extends BaseController {
 
     @Autowired
     UserRepositoryService userRepositoryService;
@@ -41,7 +34,7 @@ public class HelloController extends BaseController {
         return ws.toString();
     }
 
-    @GetMapping("/index")
+    @GetMapping("")
     public String index() {
         return "index";
     }

@@ -25,9 +25,13 @@ public class BaseResult<T> implements Serializable {
     private String message;
     @Getter
     @ApiModelProperty(value = "是否成功")
-    private boolean success;
+    private Boolean success;
 
     public BaseResult() {
+    }
+
+    public BaseResult(Boolean success) {
+        this.success = success;
     }
 
     public BaseResult(T data) {
