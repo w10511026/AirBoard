@@ -1,4 +1,4 @@
-package com.airboard.core.model.vo;
+package com.airboard.core.bo;
 
 import com.airboard.core.base.BaseObject;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class UserVO extends BaseObject {
+public class SysUserBO extends BaseObject {
 
     private String userName;
 

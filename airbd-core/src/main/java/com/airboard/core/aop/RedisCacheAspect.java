@@ -50,18 +50,22 @@ public class RedisCacheAspect {
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = pjp.getTarget().getClass().getMethod(methodSignature.getName(), methodSignature.getParameterTypes());
         //得到被代理的方法上的注解
-        Class modelType = method.getAnnotation(RedisCache.class).type();
-        int cacheTime = method.getAnnotation(RedisCache.class).cacheTime();
+        RedisCache annotation = method.getAnnotation(RedisCache.class);
         Object result = null;
-        if (!jedisTemplate.exists(key)) {
-            log.info("缓存未命中");
+        if (null == annotation) {
+            log.info("########方法未设置缓存########");
+            result = pjp.proceed(args);
+        } else if (!jedisTemplate.exists(key)) {
+            log.info("########缓存未命中########");
+            //Class modelType = annotation.type();
+            int cacheTime = annotation.cacheTime();
             //缓存不存在，则调用原方法，并将结果放入缓存中
             result = pjp.proceed(args);
             redisResult = JSON.toJSONString(result);
             jedisTemplate.set(key, redisResult, cacheTime);
         } else {
             //缓存命中
-            log.info("缓存命中");
+            log.info("########缓存命中########");
             redisResult = jedisTemplate.get(key);
             //得到被代理方法的返回值类型
             Class returnType = method.getReturnType();

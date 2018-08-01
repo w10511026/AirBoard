@@ -21,9 +21,6 @@ import lombok.experimental.Accessors;
 @Entity
 @Table(name = "${table.name}")
 #end
-#if(${table.convert})
-@TableName("${table.name}")
-#end
 #if(${superEntityClass})
 public class ${entity} extends ${superEntityClass}#if(${activeRecord})<${entity}>#end {
 #elseif(${activeRecord})
@@ -32,7 +29,7 @@ public class ${entity} extends Model<${entity}> {
 public class ${entity} implements Serializable {
 #end
 
-   private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
 ## ----------  BEGIN 字段循环遍历  ----------
 #foreach($field in ${table.fields})
@@ -47,7 +44,7 @@ public class ${entity} implements Serializable {
 #if(${field.keyFlag})
 ## 主键
 #if(${field.keyIdentityFlag})
-   @TableId(value="${field.name}", type= IdType.AUTO)
+    @TableId(value="${field.name}", type= IdType.AUTO)
 #elseif(${field.convert})
     @TableId("${field.name}")
 #end
@@ -55,22 +52,22 @@ public class ${entity} implements Serializable {
 #elseif(${field.fill})
 ## -----   存在字段填充设置   -----
 #if(${field.convert})
-   @TableField(value = "${field.name}", fill = FieldFill.${field.fill})
+    @TableField(value = "${field.name}", fill = FieldFill.${field.fill})
 #else
-   @TableField(fill = FieldFill.${field.fill})
+    @TableField(fill = FieldFill.${field.fill})
 #end
 #elseif(${field.convert})
-   @Column(name = "${field.name}")
+    @Column(name = "${field.name}")
 #end
 ## 乐观锁注解
 #if(${versionFieldName}==${field.name})
-   @Version
+    @Version
 #end
 ## 逻辑删除注解
 #if(${logicDeleteFieldName}==${field.name})
     @TableLogic
 #end
-   private ${field.propertyType} ${field.propertyName};
+    private ${field.propertyType} ${field.propertyName};
 #end
 ## ----------  END 字段循环遍历  ----------
 
@@ -82,9 +79,9 @@ public class ${entity} implements Serializable {
 #set($getprefix="get")
 #end
 
-   public ${field.propertyType} ${getprefix}${field.capitalName}() {
-      return ${field.propertyName};
-   }
+    public ${field.propertyType} ${getprefix}${field.capitalName}() {
+       return ${field.propertyName};
+    }
 
 #if(${entityBuilderModel})
    public ${entity} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
@@ -106,14 +103,14 @@ public class ${entity} implements Serializable {
 #end
 #end
 #if(${activeRecord})
-   @Override
-   protected Serializable pkVal() {
+    @Override
+    protected Serializable pkVal() {
 #if(${keyPropertyName})
-      return this.${keyPropertyName};
+       return this.${keyPropertyName};
 #else
-      return this.id;
+       return this.id;
 #end
-   }
+    }
 
 #end
 #if(!${entityLombokModel})

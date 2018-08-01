@@ -1,4 +1,4 @@
-package com.airboard.core.model;
+package com.airboard.core.model.system;
 
 import java.io.Serializable;
 import com.airboard.core.base.BaseObject;
@@ -9,13 +9,13 @@ import lombok.experimental.Accessors;
 /**
  * @Description:
  * @author Wangshuo123
- * @since 2018-07-29
+ * @since 2018-08-01
  */
 @Data
 @Accessors(chain = true)
 @Entity
-@Table(name = "users")
-public class Users extends BaseObject<Users> {
+@Table(name = "sys_user")
+public class SysUser extends BaseObject<SysUser> {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,7 +27,7 @@ public class Users extends BaseObject<Users> {
 
     @Override
     protected Serializable pkVal() {
-        return this.id;
+       return this.id;
     }
 
 }

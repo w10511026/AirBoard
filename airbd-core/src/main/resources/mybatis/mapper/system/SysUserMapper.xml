@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.airboard.core.dao.system.SysUserMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.airboard.core.model.system.SysUser">
+        <result column="id" property="id"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user_id" property="createUserId"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user_id" property="updateUserId"/>
+        <result column="user_name" property="userName"/>
+        <result column="pass_word" property="passWord"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        version,
+        create_time AS createTime,
+        create_user_id AS createUserId,
+        update_time AS updateTime,
+        update_user_id AS updateUserId,
+        user_name AS userName,
+        pass_word AS passWord
+    </sql>
+
+    <select id="findAll" resultMap="BaseResultMap"  >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM users
+    </select>
+
+    <select id="getOne" parameterType="java.lang.Long" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM users
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.airboard.core.model.system.SysUser" >
+       INSERT INTO
+       		users
+       		(user_name,pass_word)
+       	VALUES
+       		(#{userName}, #{passWord})
+    </insert>
+
+    <update id="update" parameterType="com.airboard.core.model.system.SysUser" >
+        UPDATE
+        users
+        SET
+        <if test="userName != null">user_name = #{userName},</if>
+        <if test="passWord != null">pass_word = #{passWord}</if>
+        WHERE
+        id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+       DELETE FROM
+       		 users
+       WHERE
+       		 id =#{id}
+    </delete>
+
+</mapper>

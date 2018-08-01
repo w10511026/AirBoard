@@ -1,7 +1,7 @@
 package com.airboard.core;
 
-import com.airboard.core.dao.UserMapper;
-import com.airboard.core.model.Users;
+import com.airboard.core.dao.system.SysUserMapper;
+import com.airboard.core.model.system.SysUser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +14,12 @@ import java.util.List;
 @SpringBootTest
 public class AirbdCoreApplicationTests {
 
-    //@Autowired
-    //UserRepository userRepository;
     @Autowired
-    UserMapper userMapper;
+    SysUserMapper sysUserMapper;
 
     @Test
     public void contextLoads() {
-        List<Users> all = userMapper.findAll();
+        List<SysUser> all = sysUserMapper.findAll();
         System.out.println(all);
     }
 

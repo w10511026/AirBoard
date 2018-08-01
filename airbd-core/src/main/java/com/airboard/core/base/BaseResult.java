@@ -44,6 +44,11 @@ public class BaseResult<T> implements Serializable {
         this.success = false;
     }
 
+    public BaseResult(Boolean success, String message) {
+        this.success = success;
+        this.message = message;
+    }
+
     private void setSuccess(T data) {
         if (null == data) {
             this.success = false;

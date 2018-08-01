@@ -1,7 +1,9 @@
 package com.airboard.core.dao;
 
-import com.airboard.core.model.Users;
+import com.airboard.core.model.system.SysUser;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
 
 /**
  * @Description </br>
@@ -9,5 +11,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @Author <a href="mailto:wangshuo@ebnew.com">Wangshuo</a>
  * @Date 2018/6/27
  */
-public interface UserRepository extends JpaRepository<Users, Long> {
+public interface UserRepository extends JpaRepository<SysUser, Long> {
+
+    List<SysUser> getByUserName(String userName);
+
+    List<SysUser> getByUserNameAndPassWord(String userName, String passWord);
 }
