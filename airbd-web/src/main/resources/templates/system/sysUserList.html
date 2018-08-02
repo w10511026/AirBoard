@@ -13,51 +13,112 @@
 </head>
 
 <body class="gray-bg">
-    <div class="wrapper wrapper-content animated fadeInRight">
-        <!-- Panel Other -->
-        <div class="ibox float-e-margins">
-            <div class="ibox-content">
-                <div class="row row-lg">
-                    <div class="col-sm-12">
-                        <!-- Example Pagination -->
-                        <div class="example-wrap">
-                            <h4 class="example-title">分页：客户端</h4>
-                            <div class="example">
-                                <table id="exampleTablePagination" data-toggle="table" data-url="${ctx.contextPath}/js/demo/bootstrap_table_test.json" data-query-params="queryParams" data-mobile-responsive="true" data-height="400" data-pagination="true" data-icon-size="outline" data-search="true">
-                                    <thead>
-                                        <tr>
-                                            <th data-field="state" data-checkbox="true"></th>
-                                            <th data-field="id">ID</th>
-                                            <th data-field="name">名称</th>
-                                            <th data-field="price">价格</th>
-                                        </tr>
-                                    </thead>
-                                </table>
+    <div class="wrapper wrapper-content">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>用户管理</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="row row-lg">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <div class="input-group m-b"><span class="input-group-addon">用户名</span>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="input-group m-b"><span class="input-group-addon">密码</span>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-w-m btn-primary">搜索</button>
+                                </div>
                             </div>
+                            <div class="hidden-xs" >
+                                <button class="btn btn-primary" type="button"><i class="fa fa-plus"></i></button>
+                                <button class="btn btn-primary" type="button"><i class="fa fa-pencil"></i></button>
+                                <button class="btn btn-primary" type="button"><i class="fa fa-trash"></i></button>
+                            </div>
+                            <table id="table"></table>
                         </div>
-                        <!-- End Example Pagination -->
                     </div>
                 </div>
             </div>
         </div>
-        <!-- End Panel Other -->
     </div>
 
     <!-- 全局js -->
     <script src="${ctx.contextPath}/js/jquery.min.js?v=2.1.4"></script>
     <script src="${ctx.contextPath}/js/bootstrap.min.js?v=3.3.6"></script>
-
     <!-- 自定义js -->
     <script src="${ctx.contextPath}/js/content.js?v=1.0.0"></script>
-
     <!-- Bootstrap table -->
     <script src="${ctx.contextPath}/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="${ctx.contextPath}/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
     <script src="${ctx.contextPath}/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
 
-    <!-- Peity -->
-    <script src="${ctx.contextPath}/js/demo/bootstrap-table-demo.js"></script>
-
 </body>
+<script>
+    $("#table").bootstrapTable({ // 对应table标签的id
+        url: "${ctx.contextPath}/sysUser/listSysUserPage", // 获取表格数据的url
+        cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+        striped: true,  //隔行变色
+        dataType: 'json',
+        pagination: true, // 在表格底部显示分页组件，默认false
+        pageList: [10, 20], // 设置页面可以显示的数据条数
+        pageSize: 10, // 页面数据条数
+        pageNumber: 1, // 首页页码
+        sidePagination: 'server', // 设置为服务器端分页
+        showRefresh: true,
+        /*queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+            return {
+                pageSize: params.limit, // 每页要显示的数据条数
+                offset: params.offset, // 每页显示数据的开始行号
+                sort: params.sort, // 要排序的字段
+                sortOrder: params.order, // 排序规则
+                dataId: $("#dataId").val() // 额外添加的参数
+            }
+        },*/
+        sortName: 'createTime', // 要排序的字段
+        sortOrder: 'desc', // 排序规则
+        columns: [
+            {
+                checkbox: true, // 显示一个勾选框
+                align: 'center' // 居中显示
+            },
+            {
+                field: 'userName', // 返回json数据中的name
+                title: '用户名', // 表格表头显示文字
+                align: 'center', // 左右居中
+                valign: 'middle' // 上下居中
+            },
+            {
+                field: 'passWord',
+                title: '密码',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                title: "操作",
+                align: 'center',
+                valign: 'middle',
+                width: 160, // 定义列的宽度，单位为像素px
+                formatter: function (value, row, index) {
+                    return '<button class="btn btn-primary btn-sm" onclick="del(\'' + row.id + '\')">删除</button>';
+                }
+            }
+        ],
+        onLoadSuccess: function(){
+            console.info("加载成功");
+        },
+        onLoadError: function(){
+            console.info("加载数据失败");
+        }
+    })
+
+</script>
 
 </html>
