@@ -26,6 +26,12 @@ public class BaseResult<T> implements Serializable {
     @Getter
     @ApiModelProperty(value = "是否成功")
     private Boolean success;
+    @Getter
+    @Setter
+    private Integer total;
+    @Getter
+    @Setter
+    private T rows;
 
     public BaseResult() {
     }

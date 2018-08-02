@@ -5,6 +5,7 @@ import com.airboard.core.base.BaseController;
 import com.airboard.core.base.BaseResult;
 import com.airboard.core.model.system.SysUser;
 import com.airboard.core.service.system.SysUserRepositoryService;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,11 +46,12 @@ public class SysUserController extends BaseController {
      */
     @ResponseBody
     @GetMapping("/listSysUserPage")
-    public BaseResult listSysUserPage() {
+    public BaseResult listSysUserPage(Integer limit, Integer offset, String userName) {
         BaseResult result = new BaseResult();
         try {
             List<SysUser> list = sysUserRepositoryService.listAll();
-            result.setData(list);
+            result.setRows(list);
+            result.setTotal(list.size());
         } catch (Exception e) {
             log.error("listSysUserPage -=- {}", e.toString());
         }

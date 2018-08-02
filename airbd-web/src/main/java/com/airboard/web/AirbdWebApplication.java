@@ -42,9 +42,7 @@ public class AirbdWebApplication implements WebMvcConfigurer {
     //fastjson处理Long类型精度丢失问题
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        FastJsonHttpMessageConverter fastConverter =
-                new FastJsonHttpMessageConverter();
-
+        FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         SerializeConfig serializeConfig = SerializeConfig.globalInstance;
         serializeConfig.put(BigInteger.class, ToStringSerializer.instance);
