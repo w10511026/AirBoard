@@ -179,15 +179,14 @@
 
     function queryParams(params) {
         var param = {};
-        console.info($('#searchForm').find('[name]'));
         $('#searchForm').find('[name]').each(function () {
             var value = $(this).val();
             if (value != '') {
                 param[$(this).attr('name')] = value;
             }
         });
-        param['pageSize'] = params.limit;   //页面大小
-        param['pageNumber'] = params.offset;   //页码
+        param['pageSize'] = params.limit;
+        param['pageNumber'] = params.offset;
         return param;
     }
 
