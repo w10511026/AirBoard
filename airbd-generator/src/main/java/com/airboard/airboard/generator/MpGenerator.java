@@ -1,12 +1,14 @@
 package com.airboard.airboard.generator;
 
+
+
+import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.converts.MySqlTypeConvert;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
-import com.baomidou.mybatisplus.generator.config.rules.DbType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 
 import java.util.ArrayList;
@@ -54,10 +56,10 @@ public class MpGenerator {
         dsc.setTypeConvert(new MySqlTypeConvert() {
             // 自定义数据库表字段类型转换【可选】
             @Override
-            public DbColumnType processTypeConvert(String fieldType) {
+            public DbColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
                 System.out.println("转换类型：" + fieldType);
                 // 注意！！processTypeConvert 存在默认类型转换，如果不是你要的效果请自定义返回、非如下直接返回。
-                return super.processTypeConvert(fieldType);
+                return super.processTypeConvert(globalConfig, fieldType);
             }
         });
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");

@@ -24,8 +24,7 @@
         <lombok.version>1.18.0</lombok.version>
         <commons-lang3.version>3.7</commons-lang3.version>
         <commons-collections.version>3.2.2</commons-collections.version>
-        <mybatisplus-spring-boot-starter.version>1.0.5</mybatisplus-spring-boot-starter.version>
-        <mybatisplus.version>2.1.8</mybatisplus.version>
+        <mybatis-plus-boot-starter.version>3.0-gamma</mybatis-plus-boot-starter.version>
     </properties>
 
     <dependencyManagement>
@@ -119,13 +118,8 @@
             </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>
-                <artifactId>mybatisplus-spring-boot-starter</artifactId>
-                <version>${mybatisplus-spring-boot-starter.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus</artifactId>
-                <version>${mybatisplus.version}</version>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus-boot-starter.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
