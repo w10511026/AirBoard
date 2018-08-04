@@ -11,11 +11,6 @@
     <name>airbd-generator</name>
     <description>Demo project for Spring Boot</description>
 
-    <properties>
-        <mybatisplus-spring-boot-starter.version>1.0.5</mybatisplus-spring-boot-starter.version>
-        <mybatisplus.version>2.1.8</mybatisplus.version>
-    </properties>
-
     <parent>
         <groupId>com.airboard</groupId>
         <artifactId>airbd-parent</artifactId>
@@ -44,12 +39,10 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatisplus-spring-boot-starter</artifactId>
-            <version>${mybatisplus-spring-boot-starter.version}</version>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus</artifactId>
-            <version>${mybatisplus.version}</version>
         </dependency>
         <!-- 模板引擎 代码生成 -->
         <dependency>

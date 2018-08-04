@@ -45,7 +45,7 @@ public class SysUserController extends BaseController {
      */
     @ResponseBody
     @GetMapping("/listSysUserPage")
-    public BaseResult listSysUserPage(Integer offset, Integer limit, String sortField, String sortWay) {
+    public BaseResult listSysUserPage(Integer pageIndex, Integer pageSize, String sortField, String sortOrder) {
         BaseResult result = new BaseResult();
         try {
             List<SysUser> list = sysUserRepositoryService.listAll();
