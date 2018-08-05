@@ -1,4 +1,4 @@
-package com.airboard.core.dao;
+package com.airboard.core.dao.system;
 
 import com.airboard.core.model.system.SysUser;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +11,7 @@ import java.util.List;
  * @Author <a href="mailto:wangshuo@ebnew.com">Wangshuo</a>
  * @Date 2018/6/27
  */
-public interface UserRepository extends JpaRepository<SysUser, Long> {
+public interface SysUserRepository extends JpaRepository<SysUser, Long> {
 
     List<SysUser> getByUserName(String userName);
 

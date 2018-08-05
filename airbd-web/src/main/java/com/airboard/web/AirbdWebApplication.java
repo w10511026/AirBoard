@@ -24,7 +24,7 @@ import java.util.List;
 @EnableEurekaClient
 @SpringBootApplication
 @ComponentScan("com.airboard")
-@MapperScan("com.airboard.core.dao")
+//@MapperScan("com.airboard.core.dao")
 @EnableJpaRepositories("com.airboard")
 @EntityScan("com.airboard")
 public class AirbdWebApplication implements WebMvcConfigurer {

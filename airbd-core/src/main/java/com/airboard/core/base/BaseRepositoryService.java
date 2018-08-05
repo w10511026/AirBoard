@@ -1,7 +1,11 @@
 package com.airboard.core.base;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description JPA基础service
@@ -10,15 +14,21 @@ import java.util.List;
  */
 public interface BaseRepositoryService<T extends BaseObject, ID extends Serializable> {
 
-    List<T> listAll();
+    boolean insert(T var1);
 
-    T getById(ID id);
+    boolean deleteById(Serializable var1);
 
-    void save(T t);
+    boolean updateById(T var1);
 
-    void update(T t);
+    boolean insertOrUpdate(T var1);
 
-    void saveOrUpdate(T t);
+    T selectById(Serializable var1);
 
-    void deleteById(ID id);
+    List<Map<String, Object>> selectMapList(T var1);
+
+    int selectCount(T var1);
+
+    List<T> selectList(T var1);
+
+    Page<T> selectPage(Pageable pageable, T var1);
 }

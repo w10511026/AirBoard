@@ -44,6 +44,7 @@ public class AirbdApiApplication implements WebMvcConfigurer {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("AIR-BOARD API DOCS")
+                .termsOfServiceUrl("http://www.cerhome.com")
                 .version("1.0")
                 .build();
     }

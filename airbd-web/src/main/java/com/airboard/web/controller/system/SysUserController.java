@@ -3,8 +3,15 @@ package com.airboard.web.controller.system;
 
 import com.airboard.core.base.BaseController;
 import com.airboard.core.base.BaseResult;
+import com.airboard.core.base.DataSourceContextHolder;
+import com.airboard.core.enums.DataSourceEnum;
 import com.airboard.core.model.system.SysUser;
-import com.airboard.core.service.system.SysUserRepositoryService;
+import com.airboard.core.service.system.SysUserService;
+import com.airboard.core.service.system.SysUserJPAService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +37,20 @@ public class SysUserController extends BaseController {
     private final static String BASE_DIR = "system/";
 
     @Autowired
-    public SysUserRepositoryService sysUserRepositoryService;
+    SysUserService sysUserService;
+    @Autowired
+    public SysUserJPAService sysUserJPAService;
+
+    @ApiOperation(value = "查询学生")
+    @GetMapping("/list")
+    @ResponseBody
+    public IPage list(){
+        DataSourceContextHolder.setDataSource(DataSourceEnum.DB1.getValue());
+        QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
+        IPage<SysUser> iPage = new Page<>(1, 10);
+        IPage<SysUser> sysUserIPage = sysUserService.selectPage(iPage, wrapper);
+        return sysUserIPage;
+    }
 
     /**
      * 跳转列表页面
@@ -48,9 +68,13 @@ public class SysUserController extends BaseController {
     public BaseResult listSysUserPage(Integer pageIndex, Integer pageSize, String sortField, String sortOrder) {
         BaseResult result = new BaseResult();
         try {
-            List<SysUser> list = sysUserRepositoryService.listAll();
-            result.setRows(list);
-            result.setTotal(list.size());
+            IPage<SysUser> page = new Page<>(null != pageIndex ? pageIndex : 1, null != pageSize ? pageSize : 10);
+            SysUser sysUser = new SysUser();
+            sysUser.setUserName("laowang1");
+            QueryWrapper<SysUser> wrapper = new QueryWrapper<>(sysUser);
+            IPage<SysUser> sysUserIPage = sysUserService.selectPage(page, wrapper);
+            result.setRows(sysUserIPage.getRecords());
+            result.setTotal(sysUserIPage.getTotal().intValue());
         } catch (Exception e) {
             log.error("listSysUserPage -=- {}", e.toString());
         }
@@ -76,7 +100,7 @@ public class SysUserController extends BaseController {
     @GetMapping("/toUpdate")
     public String sysUserUpdate(HttpServletRequest request, Long id) {
         try {
-            SysUser sysUser = sysUserRepositoryService.getById(id);
+            SysUser sysUser = sysUserJPAService.selectById(id);
             request.setAttribute("sysUser", sysUser);
         } catch (Exception ex) {
             log.error("sysUserUpdate -=- {}", ex.toString());
@@ -92,7 +116,7 @@ public class SysUserController extends BaseController {
     public int sysUserSave(SysUser sysUser) {
         int count = 0;
         try {
-            sysUserRepositoryService.saveOrUpdate(sysUser);
+            sysUserJPAService.insertOrUpdate(sysUser);
         } catch (Exception e) {
             log.error("sysUserSave -=- {}", e.toString());
         }
@@ -107,7 +131,7 @@ public class SysUserController extends BaseController {
     public int delete(Long... id) {
         int count = 0;
         try {
-            //count = sysUserRepositoryService.deleteById(id) ? 1 : 0;
+            count = sysUserJPAService.deleteById(id) ? 1 : 0;
         } catch (Exception e) {
             log.error("sysUserDelete -=- {}", e.toString());
         }
