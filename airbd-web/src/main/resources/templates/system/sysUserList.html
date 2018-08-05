@@ -1,24 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bootstrap Table</title>
-    <link rel="shortcut icon" href="favicon.ico">
-    <link href="${ctx.contextPath}/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-    <link href="${ctx.contextPath}/css/font-awesome.css?v=4.4.0" rel="stylesheet">
-    <link href="${ctx.contextPath}/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
-    <link href="${ctx.contextPath}/css/animate.css" rel="stylesheet">
-    <link href="${ctx.contextPath}/css/style.css?v=4.1.0" rel="stylesheet">
-</head>
-
-<body class="gray-bg">
+<#include "/common/_header.html"/>
 <div class="wrapper wrapper-content">
     <div class="col-sm-12">
         <div class="ibox float-e-margins">
-            <div class="ibox-title">
-                <h5>用户管理</h5>
-            </div>
             <div class="ibox-content">
                 <div class="row row-lg">
                     <div class="col-sm-12">
@@ -34,7 +17,7 @@
                                         <input type="text" name="passWord" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <button type="button" id="resetBtn" class="btn btn-w-m btn-default">重置</button>
                                     <button type="button" id="searchBtn" class="btn btn-w-m btn-primary">搜索</button>
                                 </div>
@@ -55,18 +38,7 @@
         </div>
     </div>
 </div>
-
-<!-- 全局js -->
-<script src="${ctx.contextPath}/js/jquery.min.js?v=2.1.4"></script>
-<script src="${ctx.contextPath}/js/bootstrap.min.js?v=3.3.6"></script>
-<!-- 自定义js -->
-<script src="${ctx.contextPath}/js/content.js?v=1.0.0"></script>
-<!-- Bootstrap table -->
-<script src="${ctx.contextPath}/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
-<script src="${ctx.contextPath}/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
-<script src="${ctx.contextPath}/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
-
-</body>
+<#include "/common/_footer.html"/>
 <script>
     $(function () {
         var oTable = new TableInit();
@@ -94,7 +66,7 @@
                 sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
                 pageNumber: 1,                       //初始化加载第一页，默认第一页
                 pageSize: 10,                       //每页的记录行数（*）
-                pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+                pageList: [10, 20, 50, 100],        //可供选择的每页的行数（*）
                 search: false,                      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
                 strictSearch: true,
                 showColumns: true,                  //是否显示所有的列
@@ -102,7 +74,6 @@
                 minimumCountColumns: 2,             //最少允许的列数
                 clickToSelect: true,                //是否启用点击选中行
                 uniqueId: "Id",                     //每一行的唯一标识，一般为主键列
-                showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
                 cardView: false,                    //是否显示详细视图
                 detailView: false,                  //是否显示父子表
                 columns: [{
@@ -113,7 +84,7 @@
                 }, {
                     field: 'passWord',
                     title: '密码'
-                }, {
+                }/*, {
                     title: '操作',
                     align: 'center',
                     valign: 'middle',
@@ -124,14 +95,14 @@
                         result += "<a href='javascript:;' class='btn btn-xs blue' onclick=\"EditViewById('" + id + "')\" title='编辑'><span class='glyphicon glyphicon-pencil'></span></a>";
                         return result;
                     }
-                }],
+                }*/],
                 onLoadSuccess: function () {
                 },
                 onLoadError: function () {
                 },
                 onDblClickRow: function (row, $element) {
-                    /*var id = row.ID;
-                    EditViewById(id, 'view');*/
+                    var id = row.Id;
+                    getViewById(id);
                 }
             });
         };
@@ -153,7 +124,7 @@
         let oInit = new Object();
         oInit.Init = function () {
             $("#addBtn").click(function () {
-                $("#add").modal("show");
+                getViewById();
             });
             $("#editBtn").click(function () {
                 let selectedRaido = $table.bootstrapTable('getSelections');
@@ -183,6 +154,25 @@
         return oInit;
     };
 
+    function getViewById(id) {
+        var layer = layui.layer;
+        layer.open({
+            type: 2
+            ,title: "详细"
+            ,closeBtn: false
+            ,scrollbar: false
+            ,area: ['700px', '450px']
+            ,shade: 0.8
+            ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+            ,resize: false
+            ,btn: ['确定', '取消']
+            ,shadeClose: true
+            ,moveType: 1 //拖拽模式，0或者1
+            ,content: '${ctx.contextPath}/system/sysUserForm.html'
+            ,yes: function(){
+                layer.msg("xx");
+                //layer.closeAll();
+            }
+        });
+    }
 </script>
-
-</html>

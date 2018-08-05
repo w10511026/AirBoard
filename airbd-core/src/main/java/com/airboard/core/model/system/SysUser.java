@@ -8,11 +8,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-/**
- * @Description:
- * @author Wangshuo123
- * @since 2018-08-01
- */
 @Data
 @Accessors(chain = true)
 @Entity

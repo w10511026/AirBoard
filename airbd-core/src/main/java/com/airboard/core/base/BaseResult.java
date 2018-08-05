@@ -1,5 +1,6 @@
 package com.airboard.core.base;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -66,6 +67,12 @@ public class BaseResult<T> implements Serializable {
     public void setData(T data) {
         this.data = data;
         this.setSuccess(data);
+    }
+
+    public void setData(IPage<T> page) {
+        this.total = page.getTotal().intValue();
+        this.rows = (T) page.getRecords();
+        this.setSuccess((T) page.getRecords());
     }
 
     @Override
