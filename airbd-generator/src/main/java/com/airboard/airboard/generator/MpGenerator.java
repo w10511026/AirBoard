@@ -24,7 +24,9 @@ public class MpGenerator {
     final static String DB_URL = "jdbc:mysql://47.106.15.76:3306/airboard?characterEncoding=utf8&useSSL=false";
     final static String DB_USERNAME = "root";
     final static String DB_PASSWORD = "Wangzong666.";
-    final static String OUT_DIR = "D://test//";
+    final static String OUT_DIR = "D://自动生成结果//";
+
+    final static String[] GENERATOR_TABLE = new String[]{"sys_role_permission", "sys_role", "sys_permission", "sys_user_role"};
 
     public static void main(String[] args) {
         AutoGenerator mpg = new AutoGenerator();
@@ -45,8 +47,8 @@ public class MpGenerator {
         // 自定义文件命名，注意 %s 会自动填充表实体属性！
         // gc.setMapperName("%sDao");
         // gc.setXmlName("%sDao");
-        gc.setServiceName("%sMapperService");
-        gc.setServiceImplName("%sMapperServiceImpl");
+        gc.setServiceName("%sService");
+        gc.setServiceImplName("%sServiceImpl");
         // gc.setControllerName("%sAction");
         mpg.setGlobalConfig(gc);
 
@@ -73,18 +75,18 @@ public class MpGenerator {
         // strategy.setCapitalMode(true);// 全局大写命名 ORACLE 注意
         //strategy.setTablePrefix(new String[] { "tlog_", "tsys_" });// 此处可以修改为您的表前缀
         strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-        strategy.setInclude(new String[]{"sys_user"}); // 需要生成的表
+        strategy.setInclude(GENERATOR_TABLE); // 需要生成的表
         // strategy.setExclude(new String[]{"test"}); // 排除生成的表
         // 自定义实体父类
         strategy.setSuperEntityClass("com.airboard.core.base.BaseObject");
         // 自定义实体，公共字段
         strategy.setSuperEntityColumns(new String[] { "id", "create_time", "create_user_id", "update_time", "update_user_id", "version" });
         // 自定义 mapper 父类
-        strategy.setSuperMapperClass("com.airboard.core.base.BaseMapper");
+        strategy.setSuperMapperClass("com.baomidou.mybatisplus.core.mapper.BaseMapper");
         // 自定义 service 父类
-        strategy.setSuperServiceClass("com.airboard.core.base.BaseMapperService");
+        strategy.setSuperServiceClass("com.baomidou.mybatisplus.extension.service.IService");
         // 自定义 service 实现类父类
-        strategy.setSuperServiceImplClass("com.airboard.core.base.AbstractBaseMapperService");
+        strategy.setSuperServiceImplClass("com.baomidou.mybatisplus.extension.service.impl.ServiceImpl");
         // 自定义 controller 父类
         strategy.setSuperControllerClass("com.airboard.core.base.BaseController");
         // 【实体】是否生成字段常量（默认 false）

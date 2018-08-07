@@ -8,6 +8,6 @@ import ${superMapperClassPackage};
  * @author ${author}
  * @since ${date}
  */
-public interface ${table.mapperName} extends ${superMapperClass}<${entity}, Long> {
+public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
 
 }

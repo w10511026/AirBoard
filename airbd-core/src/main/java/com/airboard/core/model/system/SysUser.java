@@ -3,11 +3,15 @@ package com.airboard.core.model.system;
 import java.io.Serializable;
 import com.airboard.core.base.BaseObject;
 import javax.persistence.*;
-
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import com.baomidou.mybatisplus.annotation.TableName;
 
+/**
+ * @Description:
+ * @author Wangshuo
+ * @since 2018-08-07
+ */
 @Data
 @Accessors(chain = true)
 @Entity
@@ -17,15 +21,26 @@ public class SysUser extends BaseObject<SysUser> {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "user_name")
-    private String userName;
+    @Column(name = "login_name")
+    private String loginName;
     @Column(name = "pass_word")
     private String passWord;
+    @Column(name = "user_name")
+    private String userName;
+    @Column(name = "user_type")
+    private Integer userType;
+    private Integer mobile;
+    private Integer sex;
+    private String email;
+    private Integer status;
+    @Column(name = "card_no")
+    private Integer cardNo;
+    private String salt;
 
 
     @Override
     protected Serializable pkVal() {
-       return this.id;
+        return this.id;
     }
 
 }

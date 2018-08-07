@@ -8,6 +8,7 @@ import com.airboard.core.base.BaseObject;
 import javax.persistence.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import com.baomidou.mybatisplus.annotation.TableName;
 #end
 
 /**
@@ -19,7 +20,8 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Entity
-@Table(name = "${table.name}")
+@Table(name = "${table.name}")//JPA标识
+@TableName("${table.name}")//mybatis标识
 #end
 #if(${superEntityClass})
 public class ${entity} extends ${superEntityClass}#if(${activeRecord})<${entity}>#end {

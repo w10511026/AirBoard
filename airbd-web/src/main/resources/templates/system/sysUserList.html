@@ -19,7 +19,9 @@
                                 </div>
                                 <div class="col-sm-3">
                                     <button type="button" id="resetBtn" class="btn btn-w-m btn-default">重置</button>
-                                    <button type="button" id="searchBtn" class="btn btn-w-m btn-primary">搜索</button>
+                                    <@shiro.hasPermission name = "xxx" >
+                                        <button type="button" id="searchBtn" class="btn btn-w-m btn-primary">搜索</button>
+                                    </@shiro.hasPermission>
                                 </div>
                             </form>
                         </div>
