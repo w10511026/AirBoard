@@ -1,6 +1,8 @@
 package com.airboard.core.model.system;
 
 import java.io.Serializable;
+import java.util.List;
+
 import com.airboard.core.base.BaseObject;
 import javax.persistence.*;
 import lombok.Data;
@@ -36,7 +38,11 @@ public class SysUser extends BaseObject<SysUser> {
     @Column(name = "card_no")
     private Integer cardNo;
     private String salt;
-
+    @ManyToMany(cascade = {}, fetch = FetchType.EAGER)
+    @JoinTable(name = "sys_user_role",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    private List<SysRole> roles;
 
     @Override
     protected Serializable pkVal() {

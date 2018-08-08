@@ -1,15 +1,17 @@
 package com.airboard.core.model.system;
 
-import java.io.Serializable;
 import com.airboard.core.base.BaseObject;
-import javax.persistence.*;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import com.baomidou.mybatisplus.annotation.TableName;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 
 /**
- * @Description:
  * @author Wangshuo
+ * @Description:
  * @since 2018-08-07
  */
 @Data
@@ -26,10 +28,15 @@ public class SysRole extends BaseObject<SysRole> {
      */
     private String name;
 
+    @ManyToMany(cascade = {}, fetch = FetchType.EAGER)
+    @JoinTable(name = "sys_role_permission",
+            joinColumns = {@JoinColumn(name = "role_id")},
+            inverseJoinColumns = {@JoinColumn(name = "permission_id")})
+    private List<SysPermission> permissions;
 
     @Override
     protected Serializable pkVal() {
-       return this.id;
+        return this.id;
     }
 
 }

@@ -21,8 +21,8 @@ public class SysUserVO extends BaseObject {
     private Integer status;
     private Integer cardNo;
     private String salt;
-    private List<Integer> roleIds;
-    
+    private List<SysRoleVO> roles;
+
     @Override
     protected Serializable pkVal() {
         return this.id;

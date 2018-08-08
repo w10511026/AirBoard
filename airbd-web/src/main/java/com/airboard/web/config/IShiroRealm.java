@@ -1,8 +1,7 @@
 package com.airboard.web.config;
 
 import com.airboard.core.model.system.SysUser;
-import com.airboard.core.service.system.SysUserJPAService;
-import com.airboard.core.service.system.SysUserRoleService;
+import com.airboard.core.service.system.SysUserService;
 import com.airboard.core.vo.SysUserVO;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -11,6 +10,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
@@ -33,10 +33,7 @@ public class IShiroRealm extends AuthorizingRealm {
      */
     @Lazy
     @Autowired
-    SysUserJPAService sysUserJPAService;
-    @Lazy
-    @Autowired
-    SysUserRoleService sysUserRoleService;
+    SysUserService sysUserService;
 
     /**
      * @Description: 认证方法
@@ -44,9 +41,9 @@ public class IShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String userName = (String) token.getPrincipal();
-        List<SysUserVO> userList = sysUserJPAService.getByUserName(userName);
+        List<SysUserVO> userList = sysUserService.getByUserName(userName);
         if (CollectionUtils.isEmpty(userList)) {
-            return null;
+            throw new UnauthorizedException("User didn't existed!");
         }
         SysUserVO sysUser = userList.get(0);
         return new SimpleAuthenticationInfo(sysUser, sysUser.getPassWord(), ByteSource.Util.bytes(sysUser.getSalt()), getName());
@@ -59,7 +56,7 @@ public class IShiroRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         SysUser sysUser = (SysUser) principalCollection.getPrimaryPrincipal();
-        info.addStringPermission("xxx");
+
         return info;
     }
 

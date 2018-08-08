@@ -5,12 +5,9 @@ import com.airboard.core.base.BaseController;
 import com.airboard.core.base.BasePage;
 import com.airboard.core.base.BaseResult;
 import com.airboard.core.model.system.SysUser;
-import com.airboard.core.service.system.SysUserJPAService;
 import com.airboard.core.service.system.SysUserService;
 import com.airboard.core.vo.SysUserVO;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,8 +29,6 @@ public class SysUserController extends BaseController {
 
     @Autowired
     SysUserService sysUserService;
-    @Autowired
-    public SysUserJPAService sysUserJPAService;
 
     /**
      * 跳转列表页面
@@ -51,7 +46,7 @@ public class SysUserController extends BaseController {
     public BaseResult listSysUserPage(BasePage basePage, SysUserVO sysUserVO) {
         BaseResult result = new BaseResult();
         try {
-            IPage<SysUser> resultPage = sysUserService.listPageByCondition(basePage, sysUserVO);
+            IPage<SysUser> resultPage = sysUserService.listIPageByCondition(basePage, sysUserVO);
             result.setData(resultPage);
         } catch (Exception e) {
             log.error("listSysUserPage -=- {}", e.toString());
@@ -78,7 +73,7 @@ public class SysUserController extends BaseController {
     @GetMapping("/toUpdate")
     public String sysUserUpdate(HttpServletRequest request, Long id) {
         try {
-            SysUser sysUser = sysUserJPAService.selectById(id);
+            SysUser sysUser = sysUserService.selectById(id);
             request.setAttribute("sysUser", sysUser);
         } catch (Exception ex) {
             log.error("sysUserUpdate -=- {}", ex.toString());
@@ -94,7 +89,7 @@ public class SysUserController extends BaseController {
     public int sysUserSave(SysUser sysUser) {
         int count = 0;
         try {
-            sysUserJPAService.insertOrUpdate(sysUser);
+            sysUserService.insertOrUpdate(sysUser);
         } catch (Exception e) {
             log.error("sysUserSave -=- {}", e.toString());
         }
@@ -109,7 +104,7 @@ public class SysUserController extends BaseController {
     public int delete(Long... id) {
         int count = 0;
         try {
-            count = sysUserJPAService.deleteById(id) ? 1 : 0;
+            count = sysUserService.deleteById(id) ? 1 : 0;
         } catch (Exception e) {
             log.error("sysUserDelete -=- {}", e.toString());
         }
