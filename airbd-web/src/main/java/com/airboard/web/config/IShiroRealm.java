@@ -1,8 +1,10 @@
 package com.airboard.web.config;
 
-import com.airboard.core.model.system.SysUser;
 import com.airboard.core.service.system.SysUserService;
+import com.airboard.core.vo.SysRoleVO;
 import com.airboard.core.vo.SysUserVO;
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -54,10 +56,24 @@ public class IShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        SysUser sysUser = (SysUser) principalCollection.getPrimaryPrincipal();
-
-        return info;
+        SysUserVO sysUser = (SysUserVO) principalCollection.getPrimaryPrincipal();
+        List<SysRoleVO> roleVOS = sysUser.getRoles();
+        List<String> roleNameList = Lists.newArrayList();
+        List<String> permissionNameList = Lists.newArrayList();
+        if (CollectionUtils.isNotEmpty(roleVOS)) {
+            roleVOS.forEach(item -> {
+                roleNameList.add(item.getName());
+                if (CollectionUtils.isNotEmpty(item.getPermissions())) {
+                    item.getPermissions().forEach(per -> {
+                        permissionNameList.add(per.getName());
+                    });
+                }
+            });
+        }
+        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        authorizationInfo.addRoles(roleNameList);
+        authorizationInfo.addStringPermissions(permissionNameList);
+        return authorizationInfo;
     }
 
 }

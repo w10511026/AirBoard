@@ -4,6 +4,7 @@ import com.airboard.core.annotation.RedisCache;
 import com.airboard.core.base.JedisTemplate;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.collections.CollectionUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -14,6 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @Description
@@ -50,10 +56,12 @@ public class RedisCacheAspect {
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = pjp.getTarget().getClass().getMethod(methodSignature.getName(), methodSignature.getParameterTypes());
         //得到被代理的方法上的注解
+        Class clazz = method.getAnnotation(RedisCache.class).type();
+        //得到被代理的方法上的注解
         RedisCache annotation = method.getAnnotation(RedisCache.class);
         Object result = null;
         if (null == annotation) {
-            log.info("########方法未设置缓存########");
+            //方法未设置缓存,正常执行
             result = pjp.proceed(args);
         } else if (!jedisTemplate.exists(key)) {
             log.info("########缓存未命中########");
@@ -66,10 +74,19 @@ public class RedisCacheAspect {
         } else {
             //缓存命中
             log.info("########缓存命中########");
+            boolean isCollection = true;
+            try {
+                //得到被代理方法的返回值类型,并转换为集合类型，如果可以转换，说明是集合类型
+                method.getReturnType().asSubclass(Collection.class);
+            } catch (ClassCastException e) {
+                isCollection = false;
+            }
             redisResult = jedisTemplate.get(key);
-            //得到被代理方法的返回值类型
-            Class returnType = method.getReturnType();
-            result = JSON.parseObject(redisResult, returnType);
+            if (isCollection) {
+                result = JSON.parseArray(redisResult, clazz);
+            } else {
+                result = JSON.parseObject(redisResult, clazz);
+            }
         }
         return result;
     }

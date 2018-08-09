@@ -6,6 +6,8 @@ import com.airboard.core.dao.system.SysUserMapper;
 import com.airboard.core.dao.system.SysUserRepository;
 import com.airboard.core.model.system.SysUser;
 import com.airboard.core.service.system.SysUserService;
+import com.airboard.core.vo.SysPermissionVO;
+import com.airboard.core.vo.SysRoleVO;
 import com.airboard.core.vo.SysUserVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -22,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Service
@@ -62,6 +65,24 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             userList.forEach(item -> {
                 SysUserVO sysUserVO = new SysUserVO();
                 BeanUtils.copyProperties(item, sysUserVO);
+                if (CollectionUtils.isNotEmpty(item.getRoles())) {
+                    List<SysRoleVO> roleVOList = Lists.newArrayList();
+                    item.getRoles().forEach(sysRole -> {
+                        SysRoleVO sysRoleVO = new SysRoleVO();
+                        BeanUtils.copyProperties(sysRole, sysRoleVO);
+                        if (CollectionUtils.isNotEmpty(sysRole.getPermissions())) {
+                            List<SysPermissionVO> permissionVOList = Lists.newArrayList();
+                            sysRole.getPermissions().forEach(sysPermission -> {
+                                SysPermissionVO permissionVO = new SysPermissionVO();
+                                BeanUtils.copyProperties(sysPermission, permissionVO);
+                                permissionVOList.add(permissionVO);
+                            });
+                            sysRoleVO.setPermissions(permissionVOList);
+                        }
+                        roleVOList.add(sysRoleVO);
+                    });
+                    sysUserVO.setRoles(roleVOList);
+                }
                 resultList.add(sysUserVO);
             });
         }

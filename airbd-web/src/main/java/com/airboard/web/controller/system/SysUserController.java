@@ -6,9 +6,11 @@ import com.airboard.core.base.BasePage;
 import com.airboard.core.base.BaseResult;
 import com.airboard.core.model.system.SysUser;
 import com.airboard.core.service.system.SysUserService;
+import com.airboard.core.util.NumberUtils;
 import com.airboard.core.vo.SysUserVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,14 +59,19 @@ public class SysUserController extends BaseController {
     /**
      * 跳转添加页面
      */
-    @GetMapping("/add")
-    public String add(HttpServletRequest request, HttpServletResponse response, Model model) {
+    @GetMapping("/toDetail")
+    public String toDetail(Long id, Model model) {
         try {
-
+            SysUserVO sysUserVO = new SysUserVO();
+            if (NumberUtils.isNotEmpty(id)) {
+                SysUser sysUser = sysUserService.selectById(id);
+                BeanUtils.copyProperties(sysUser, sysUserVO);
+            }
+            model.addAttribute("sysUserVO", sysUserVO);
         } catch (Exception ex) {
             log.error("sysUserAdd -=- {}", ex.toString());
         }
-        return "sysUserAdd";
+        return BASE_DIR + "sysUserForm";
     }
 
     /**
