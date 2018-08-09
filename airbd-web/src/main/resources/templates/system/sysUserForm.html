@@ -26,9 +26,9 @@
                         <label class="col-sm-2 control-label">用户类型</label>
                         <div class="col-sm-6">
                             <select class="form-control m-b" name="account">
-                                <#list sysUserTypeEnum as val>
-                                <option value="${val.getType()}">${val.getValue()}</option>
-                            </#list>
+                                <#if sysUserTypeEnum??>
+
+                                </#if>
                             </select>
                         </div>
                     </div>
@@ -41,11 +41,9 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">性别</label>
                         <div class="col-sm-6">
-                            <select class="form-control m-b" name="account">
-                                <#list sysUserSexEnum as val>
-                                <option value="${val.getType()}">${val.getValue()}</option>
-                            </#list>
-                            </select>
+                            <!--<select class="form-control m-b" name="account">
+
+                            </select>-->
                         </div>
                     </div>
                     <div class="form-group">
@@ -63,11 +61,9 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">状态</label>
                         <div class="col-sm-6">
-                            <select class="form-control m-b" name="account">
-                                <#list sysUserStatusEnum as val>
-                                <option value="${val.getType()}">${val.getValue()}</option>
-                            </#list>
-                            </select>
+                            <!--<select class="form-control m-b" name="account">
+
+                            </select>-->
                         </div>
                     </div>
                 </form>

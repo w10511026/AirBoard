@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 
 @Controller
 @Slf4j
@@ -71,9 +72,9 @@ public class SysUserController extends BaseController {
                 BeanUtils.copyProperties(sysUser, sysUserVO);
                 model.addAttribute("sysUserVO", sysUserVO);
             }
-            model.addAttribute("sysUserTypeEnum", SysUserTypeEnum.values());
-            model.addAttribute("sysUserSexEnum", SysUserSexEnum.values());
-            model.addAttribute("sysUserStatusEnum", SysUserStatusEnum.values());
+            model.addAttribute("sysUserTypeEnum", Arrays.asList(SysUserTypeEnum.REGISTER_USER.type));
+           /* model.addAttribute("sysUserSexEnum", SysUserSexEnum.values());
+            model.addAttribute("sysUserStatusEnum", SysUserStatusEnum.values());*/
         } catch (Exception ex) {
             log.error("sysUserAdd -=- {}", ex.toString());
         }
