@@ -56,8 +56,6 @@ public class RedisCacheAspect {
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = pjp.getTarget().getClass().getMethod(methodSignature.getName(), methodSignature.getParameterTypes());
         //得到被代理的方法上的注解
-        Class clazz = method.getAnnotation(RedisCache.class).type();
-        //得到被代理的方法上的注解
         RedisCache annotation = method.getAnnotation(RedisCache.class);
         Object result = null;
         if (null == annotation) {
@@ -65,7 +63,6 @@ public class RedisCacheAspect {
             result = pjp.proceed(args);
         } else if (!jedisTemplate.exists(key)) {
             log.info("########缓存未命中########");
-            //Class modelType = annotation.type();
             int cacheTime = annotation.cacheTime();
             //缓存不存在，则调用原方法，并将结果放入缓存中
             result = pjp.proceed(args);
@@ -81,6 +78,8 @@ public class RedisCacheAspect {
             } catch (ClassCastException e) {
                 isCollection = false;
             }
+            //得到被代理的方法上的注解
+            Class clazz = method.getAnnotation(RedisCache.class).type();
             redisResult = jedisTemplate.get(key);
             if (isCollection) {
                 result = JSON.parseArray(redisResult, clazz);
@@ -93,10 +92,6 @@ public class RedisCacheAspect {
 
     /**
      * @Description: 生成key
-     * @Param:
-     * @return:
-     * @Author:
-     * @Date: 2018/5/16
      */
     private String genKey(String className, String methodName, Object[] args) {
         StringBuilder sb = new StringBuilder("SpringBoot:");

@@ -4,6 +4,9 @@ package com.airboard.web.controller.system;
 import com.airboard.core.base.BaseController;
 import com.airboard.core.base.BasePage;
 import com.airboard.core.base.BaseResult;
+import com.airboard.core.enums.SysUserSexEnum;
+import com.airboard.core.enums.SysUserStatusEnum;
+import com.airboard.core.enums.SysUserTypeEnum;
 import com.airboard.core.model.system.SysUser;
 import com.airboard.core.service.system.SysUserService;
 import com.airboard.core.util.NumberUtils;
@@ -66,8 +69,11 @@ public class SysUserController extends BaseController {
             if (NumberUtils.isNotEmpty(id)) {
                 SysUser sysUser = sysUserService.selectById(id);
                 BeanUtils.copyProperties(sysUser, sysUserVO);
+                model.addAttribute("sysUserVO", sysUserVO);
             }
-            model.addAttribute("sysUserVO", sysUserVO);
+            model.addAttribute("sysUserTypeEnum", SysUserTypeEnum.values());
+            model.addAttribute("sysUserSexEnum", SysUserSexEnum.values());
+            model.addAttribute("sysUserStatusEnum", SysUserStatusEnum.values());
         } catch (Exception ex) {
             log.error("sysUserAdd -=- {}", ex.toString());
         }

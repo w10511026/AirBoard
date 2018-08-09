@@ -11,9 +11,9 @@ import java.util.List;
 @ApiModel("系统用户vo")
 public class SysUserVO extends BaseObject {
 
-    private String loginName;
-    private String passWord;
     private String userName;
+    private String passWord;
+    private String nickName;
     private Integer userType;
     private Integer mobile;
     private Integer sex;

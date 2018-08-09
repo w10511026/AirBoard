@@ -1,17 +1,18 @@
 package com.airboard.core.model.system;
 
+import com.airboard.core.base.BaseObject;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-import com.airboard.core.base.BaseObject;
-import javax.persistence.*;
-import lombok.Data;
-import lombok.experimental.Accessors;
-import com.baomidou.mybatisplus.annotation.TableName;
-
 /**
- * @Description:
  * @author Wangshuo
+ * @Description:
  * @since 2018-08-07
  */
 @Data
@@ -23,12 +24,12 @@ public class SysUser extends BaseObject<SysUser> {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "login_name")
-    private String loginName;
-    @Column(name = "pass_word")
-    private String passWord;
     @Column(name = "user_name")
     private String userName;
+    @Column(name = "pass_word")
+    private String passWord;
+    @Column(name = "nick_name")
+    private String nickName;
     @Column(name = "user_type")
     private Integer userType;
     private Integer mobile;
@@ -38,10 +39,14 @@ public class SysUser extends BaseObject<SysUser> {
     @Column(name = "card_no")
     private Integer cardNo;
     private String salt;
+
+    //JPA注解，多对多关联查询
     @ManyToMany(cascade = {}, fetch = FetchType.EAGER)
     @JoinTable(name = "sys_user_role",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    //mbatis-plus注解，标识该字段非数据库字段
+    @TableField(exist = false)
     private List<SysRole> roles;
 
     @Override

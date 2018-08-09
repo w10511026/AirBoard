@@ -4,10 +4,10 @@ package com.airboard.core.enums;
 import lombok.Getter;
 import lombok.Setter;
 
-public enum SysUserStatusEnum {
+public enum SysUserSexEnum {
 
-    NORMAL(1, "正常"),
-    UNABLE(2, "停用");
+    MAN(1, "男"),
+    LADY(2, "女");
 
     @Getter
     @Setter
@@ -16,13 +16,13 @@ public enum SysUserStatusEnum {
     @Setter
     public String name;
 
-    SysUserStatusEnum(Integer type, String name) {
+    SysUserSexEnum(Integer type, String name) {
         this.type = type;
         this.name = name;
     }
 
-    public SysUserStatusEnum getEnumByType(Integer type) {
-        for (SysUserStatusEnum value : SysUserStatusEnum.values()) {
+    public SysUserSexEnum getEnumByType(Integer type) {
+        for (SysUserSexEnum value : SysUserSexEnum.values()) {
             if (value.getType().equals(type)) {
                 return value;
             }

@@ -26,7 +26,7 @@ public class MpGenerator {
     final static String DB_PASSWORD = "Wangzong666.";
     final static String OUT_DIR = "D://自动生成结果//";
 
-    final static String[] GENERATOR_TABLE = new String[]{"sys_role_permission", "sys_role", "sys_permission", "sys_user_role"};
+    final static String[] GENERATOR_TABLE = new String[]{"sys_user", "sys_role_permission", "sys_role", "sys_permission", "sys_user_role"};
 
     public static void main(String[] args) {
         AutoGenerator mpg = new AutoGenerator();

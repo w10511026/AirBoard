@@ -1,6 +1,7 @@
 package com.airboard.core.model.system;
 
 import com.airboard.core.base.BaseObject;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -28,10 +29,13 @@ public class SysRole extends BaseObject<SysRole> {
      */
     private String name;
 
+    //JPA注解，多对多关联查询
     @ManyToMany(cascade = {}, fetch = FetchType.EAGER)
     @JoinTable(name = "sys_role_permission",
             joinColumns = {@JoinColumn(name = "role_id")},
             inverseJoinColumns = {@JoinColumn(name = "permission_id")})
+    //mbatis-plus注解，标识该字段非数据库字段
+    @TableField(exist = false)
     private List<SysPermission> permissions;
 
     @Override

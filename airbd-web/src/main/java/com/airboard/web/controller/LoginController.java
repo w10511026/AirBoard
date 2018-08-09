@@ -2,7 +2,6 @@ package com.airboard.web.controller;
 
 import com.airboard.core.base.BaseController;
 import com.airboard.core.base.BaseResult;
-import com.airboard.core.service.system.SysUserService;
 import com.airboard.core.vo.SysUserVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -12,7 +11,6 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,17 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("")
 public class LoginController extends BaseController {
 
-    @Autowired
-    private SysUserService sysUserService;
-
     @GetMapping("")
     public String login() {
         return "login";
-    }
-
-    @GetMapping("/index")
-    public String index() {
-        return "index";
     }
 
     @ResponseBody
@@ -64,6 +54,11 @@ public class LoginController extends BaseController {
             return new BaseResult("用户或密码错误！");
         }
         return result;
+    }
+
+    @GetMapping("/index")
+    public String index() {
+        return "index";
     }
 
     @GetMapping("/logout")
