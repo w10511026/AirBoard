@@ -89,4 +89,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return resultList;
     }
 
+    @Override
+    public void insertOrUpdate(SysUserVO sysUserVO) {
+        SysUser sysUser = new SysUser();
+        BeanUtils.copyProperties(sysUserVO, sysUser);
+        this.sysUserRepository.save(sysUser);
+    }
 }

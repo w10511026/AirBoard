@@ -29,4 +29,6 @@ public interface SysUserService extends IService<SysUser> {
 
     List<SysUserVO> getByUserName(String userName);
 
+    void insertOrUpdate(SysUserVO sysUserVO);
+
 }

@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 
 @Controller
 @Slf4j
@@ -70,11 +68,11 @@ public class SysUserController extends BaseController {
             if (NumberUtils.isNotEmpty(id)) {
                 SysUser sysUser = sysUserService.selectById(id);
                 BeanUtils.copyProperties(sysUser, sysUserVO);
-                model.addAttribute("sysUserVO", sysUserVO);
             }
-            model.addAttribute("sysUserTypeEnum", Arrays.asList(SysUserTypeEnum.REGISTER_USER.type));
-           /* model.addAttribute("sysUserSexEnum", SysUserSexEnum.values());
-            model.addAttribute("sysUserStatusEnum", SysUserStatusEnum.values());*/
+            model.addAttribute("sysUserVO", sysUserVO);
+            model.addAttribute("sysUserTypeEnum", SysUserTypeEnum.values());
+            model.addAttribute("sysUserSexEnum", SysUserSexEnum.values());
+            model.addAttribute("sysUserStatusEnum", SysUserStatusEnum.values());
         } catch (Exception ex) {
             log.error("sysUserAdd -=- {}", ex.toString());
         }
@@ -100,10 +98,10 @@ public class SysUserController extends BaseController {
      */
     @ResponseBody
     @PostMapping("/save")
-    public int sysUserSave(SysUser sysUser) {
+    public int sysUserSave(SysUserVO sysUserVO) {
         int count = 0;
         try {
-            sysUserService.insertOrUpdate(sysUser);
+            sysUserService.insertOrUpdate(sysUserVO);
         } catch (Exception e) {
             log.error("sysUserSave -=- {}", e.toString());
         }

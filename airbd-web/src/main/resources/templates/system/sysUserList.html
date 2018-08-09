@@ -86,18 +86,7 @@
                 }, {
                     field: 'passWord',
                     title: '密码'
-                }/*, {
-                    title: '操作',
-                    align: 'center',
-                    valign: 'middle',
-                    clickToSelect: false,
-                    formatter: function (value, row, index) {
-                        var id = value;
-                        var result = "";
-                        result += "<a href='javascript:;' class='btn btn-xs blue' onclick=\"EditViewById('" + id + "')\" title='编辑'><span class='glyphicon glyphicon-pencil'></span></a>";
-                        return result;
-                    }
-                }*/],
+                }],
                 onLoadSuccess: function () {
                 },
                 onLoadError: function () {
@@ -163,17 +152,24 @@
             ,title: "详细"
             ,closeBtn: false
             ,scrollbar: false
-            ,area: ['700px', '450px']
-            ,shade: 0.4
+            ,area: ['770px', '630px']
+            ,shade: 0.5
             ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
             ,resize: false
             ,btn: ['确定', '取消']
             ,shadeClose: true
             ,moveType: 1 //拖拽模式，0或者1
             ,content: '${ctx.contextPath}/sysUser/toDetail'
-            ,yes: function(){
-                layer.msg("xx");
-                //layer.closeAll();
+            , yes: function () {
+                $.ajax({
+                    type: "POST",
+                    url: "${ctx.contextPath}/sysUser/save",
+                    data: $("#detailFormId").serialize(),
+                    success: function (data) {
+                        layer.msg(data.message);
+                    }
+                });
+                layer.closeAll();
             }
         });
     }
