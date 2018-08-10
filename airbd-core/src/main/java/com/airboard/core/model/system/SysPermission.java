@@ -9,8 +9,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
  * @Description:
- * @author Wangshuo
- * @since 2018-08-07
  */
 @Data
 @Accessors(chain = true)
@@ -25,19 +23,18 @@ public class SysPermission extends BaseObject<SysPermission> {
      * 权限名称
      */
     private String name;
+    private String permission;
+    @Column(name = "access_url")
+    private String accessUrl;
     /**
      * 权限类型（1:菜单 2:按钮）
      */
     private Integer type;
-    /**
-     * 菜单级别(1:一级菜单 2:二级菜单 3:三级菜单)
-     */
-    private Integer level;
-
+    private String parent;
 
     @Override
     protected Serializable pkVal() {
-       return this.id;
+        return this.id;
     }
 
 }
