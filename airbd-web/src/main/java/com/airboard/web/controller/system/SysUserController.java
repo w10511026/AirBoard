@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-
 @Controller
 @Slf4j
 @RequestMapping("/sysUser")
@@ -58,10 +56,7 @@ public class SysUserController extends BaseController {
         return result;
     }
 
-    /**
-     * 跳转添加页面
-     */
-    @GetMapping("/toDetail")
+    @GetMapping("/sysUserForm")
     public String toDetail(Long id, Model model) {
         try {
             SysUserVO sysUserVO = new SysUserVO();
@@ -80,32 +75,18 @@ public class SysUserController extends BaseController {
     }
 
     /**
-     * 跳转修改页面
-     */
-    @GetMapping("/toUpdate")
-    public String sysUserUpdate(HttpServletRequest request, Long id) {
-        try {
-            SysUser sysUser = sysUserService.selectById(id);
-            request.setAttribute("sysUser", sysUser);
-        } catch (Exception ex) {
-            log.error("sysUserUpdate -=- {}", ex.toString());
-        }
-        return "sysUserUpdate";
-    }
-
-    /**
-     * 保存和修改公用的
+     * 保存和修改
      */
     @ResponseBody
     @PostMapping("/save")
-    public int sysUserSave(SysUserVO sysUserVO) {
-        int count = 0;
+    public BaseResult save(SysUserVO sysUserVO) {
+        BaseResult result = new BaseResult(true, "操作成功！");
         try {
             sysUserService.insertOrUpdate(sysUserVO);
         } catch (Exception e) {
             log.error("sysUserSave -=- {}", e.toString());
         }
-        return count;
+        return result;
     }
 
     /**
@@ -113,14 +94,14 @@ public class SysUserController extends BaseController {
      */
     @ResponseBody
     @PostMapping("/delete")
-    public int delete(Long... id) {
-        int count = 0;
+    public BaseResult delete(Long... id) {
+        BaseResult result = new BaseResult(true, "删除成功！");
         try {
-            count = sysUserService.deleteById(id) ? 1 : 0;
+            sysUserService.deleteById(id);
         } catch (Exception e) {
             log.error("sysUserDelete -=- {}", e.toString());
         }
-        return count;
+        return result;
     }
 
 }
