@@ -1,6 +1,7 @@
 <#include "/common/_header.html"/>
 <div class="ibox-content">
-    <form class="form-horizontal" id="detailFormId">
+    <form class="form-horizontal">
+        <input type="hidden" name="id" value="${sysUserVO.id!}">
         <div class="form-group">
             <label class="col-sm-2 control-label">用户名</label>
             <div class="col-sm-8">
@@ -24,12 +25,13 @@
             <div class="col-sm-8">
                 <select class="form-control m-b" name="userType">
                     <#if sysUserTypeEnum??>
-                        <#list sysUserTypeEnum as xx>
-                            <option value="${xx.getType()}">${xx.getName()}</option>
+                        <#list sysUserTypeEnum as val>
+                            <option value="${val.getType()}" <#if val.getType() == sysUserVO.sex!0>
+                                    selected="selected"</#if>>${val.getName()}</option>
                         </#list>
                     </#if>
-            </select>
-        </div>
+                </select>
+            </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">手机号</label>
@@ -42,12 +44,13 @@
             <div class="col-sm-8">
                 <select class="form-control m-b" name="sex">
                     <#if sysUserSexEnum??>
-                        <#list sysUserTypeEnum as xx>
-                            <option value="${xx.getType()}">${xx.getName()}</option>
+                        <#list sysUserSexEnum as val>
+                            <option value="${val.getType()}" <#if val.getType() == sysUserVO.sex!0>
+                                    selected="selected"</#if>>${val.getName()}</option>
                         </#list>
                     </#if>
-            </select>
-        </div>
+                </select>
+            </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">邮箱</label>
@@ -65,9 +68,10 @@
             <label class="col-sm-2 control-label">状态</label>
             <div class="col-sm-8">
                 <select class="form-control m-b" name="status">
-                    <#if sysUserTypeEnum??>
-                        <#list sysUserStatusEnum as xx>
-                            <option value="${xx.getType()}">${xx.getName()}</option>
+                    <#if sysUserStatusEnum??>
+                        <#list sysUserStatusEnum as val>
+                            <option value="${val.getType()}" <#if val.getType() == sysUserVO.sex!0>
+                                    selected="selected"</#if>>${val.getName()}</option>
                         </#list>
                     </#if>
                 </select>

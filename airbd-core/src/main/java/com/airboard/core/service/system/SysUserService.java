@@ -20,12 +20,12 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * mybatis分页方法
      */
-    IPage<SysUser> listIPageByCondition(BasePage basePage, SysUserVO sysUserVO);
+    IPage<SysUserVO> listIPageByCondition(BasePage basePage, SysUserVO sysUserVO);
 
     /**
      * JPA分页方法
      */
-    Page<SysUser> listPageByCondition(BasePage basePage, SysUserVO sysUserVO);
+    Page<SysUserVO> listPageByCondition(BasePage basePage, SysUserVO sysUserVO);
 
     List<SysUserVO> getByUserName(String userName);
 

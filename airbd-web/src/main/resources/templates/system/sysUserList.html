@@ -12,11 +12,6 @@
                                         <input type="text" name="userName" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-2">
-                                    <div class="input-group m-b"><span class="input-group-addon">密码</span>
-                                        <input type="text" name="passWord" class="form-control">
-                                    </div>
-                                </div>
                                 <div class="col-sm-3">
                                     <button type="button" id="resetBtn" class="btn btn-w-m btn-default">重置</button>
                                     <@shiro.hasPermission name = "xxx" >
@@ -42,130 +37,59 @@
 </div>
 <#include "/common/_footer.html"/>
 <script>
-    $(function () {
-        var oTable = new TableInit();
-        oTable.Init();
-        var oButtonInit = new ButtonInit();
-        oButtonInit.Init();
+    //初始化表格
+    $iTable.bootstrapTable({
+        url: '${ctx.contextPath}/sysUser/listSysUserPage',
+        method: 'get',
+        columns: [{
+            checkbox: true
+        }, {
+            field: 'userName',
+            title: '用户名'
+        }, {
+            field: 'nickName',
+            title: '昵称'
+        }, {
+            field: 'userTypeZh',
+            title: '用户类型'
+        }, {
+            field: 'mobile',
+            title: '手机号'
+        }, {
+            field: 'sexZh',
+            title: '性别'
+        }, {
+            field: 'email',
+            title: '邮箱'
+        }, {
+            field: 'statusZh',
+            title: '状态'
+        }],
+        onDblClickRow: function (row, $element) {
+            getViewById(row.id);
+        }
     });
 
-    var $table = $('#table');
-    var TableInit = function () {
-        var oTableInit = new Object();
-        //初始化Table
-        oTableInit.Init = function () {
-            $table.bootstrapTable({
-                url: '${ctx.contextPath}/sysUser/listSysUserPage',         //请求后台的URL（*）
-                method: 'get',                      //请求方式（*）
-                toolbar: '#toolbar',                //工具按钮用哪个容器
-                striped: true,                      //是否显示行间隔色
-                cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-                pagination: true,                   //是否显示分页（*）
-                sortable: true,                    //是否启用排序
-                sortOrder: "desc",                   //排序方式
-                sortName: "createTime",
-                queryParams: oTableInit.queryParams,//传递参数（*）
-                sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                pageNumber: 1,                       //初始化加载第一页，默认第一页
-                pageSize: 10,                       //每页的记录行数（*）
-                pageList: [10, 20, 50, 100],        //可供选择的每页的行数（*）
-                search: false,                      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
-                strictSearch: true,
-                showColumns: true,                  //是否显示所有的列
-                showRefresh: true,                  //是否显示刷新按钮
-                minimumCountColumns: 2,             //最少允许的列数
-                clickToSelect: true,                //是否启用点击选中行
-                uniqueId: "Id",                     //每一行的唯一标识，一般为主键列
-                cardView: false,                    //是否显示详细视图
-                detailView: false,                  //是否显示父子表
-                columns: [{
-                    checkbox: true
-                }, {
-                    field: 'userName',
-                    title: '名称'
-                }, {
-                    field: 'passWord',
-                    title: '密码'
-                }],
-                onLoadSuccess: function () {
-                },
-                onLoadError: function () {
-                },
-                onDblClickRow: function (row, $element) {
-                    var id = row.Id;
-                    openForm(id, true);
-                }
-            });
-        };
-        oTableInit.queryParams = function (params) {
-            let param = {};
-            $('#searchForm').find('[name]').each(function () {
-                param[$(this).attr('name')] = $(this).val();
-            });
-            param['pageSize'] = params.limit;
-            param['pageIndex'] = (params.offset / params.limit) + 1;
-            param["sortField"] = params.sort;      //排序列名
-            param["sortOrder"] = params.order; //排位命令（desc，asc）
-            return param;
-        };
-        return oTableInit;
-    };
-
-    let ButtonInit = function () {
-        let oInit = new Object();
-        oInit.Init = function () {
-            $("#addBtn").click(function () {
-                openForm(null, false);
-            });
-            $("#editBtn").click(function () {
-                let selectedRaido = $table.bootstrapTable('getSelections');
-                if (selectedRaido.length === 0) {
-                    layer.msg("请先选择要编辑的行！");
-                } else if (selectedRaido.length > 1) {
-                    layer.msg("只能选择一条数据！");
-                } else {
-                    openForm(selectedRaido[0].Id, false);
-                }
-            });
-            $("#deleteBtn").click(function () {
-                let selectedRaido = $table.bootstrapTable('getSelections');
-                if (selectedRaido.length === 0) {
-                    layer.msg("请先选择要删除的行！");
-                } else {
-                    deleteByIds(selectedRaido[0].Id);
-                }
-            });
-            $("#searchBtn").click(function () {
-                $table.bootstrapTable('refresh');
-            });
-            $("#resetBtn").click(function () {
-                $('#searchForm').find('[name]').each(function () {
-                    $(this).val('');
-                });
-            });
-        };
-        return oInit;
-    };
-
-    function openForm(id, isView) {
-        var btns = [];
-        if (!isView) {
-            btns = ['确定', '取消'];
-        }
+    //查看详细
+    function getViewById(id) {
         layer.open({
             type: 2
-            ,title: "详细"
-            ,anim: 0
-            ,closeBtn: false
-            ,scrollbar: false
-            ,area: ['770px', '630px']
-            ,shade: 0.5
-            ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
-            ,resize: false
-            ,btn: btns
-            ,shadeClose: true
-            ,moveType: 1 //拖拽模式，0或者1
-            ,content: ['${ctx.contextPath}/sysUser/toDetail', 'no']
+            , title: "详细"
+            , area: ['770px', '630px']
+            , shadeClose: true
+            , content: ['${ctx.contextPath}/sysUser/sysUserForm?id=' + id, 'no']
+        });
+    }
+
+    //新增/修改
+    function addOrUpdate(id) {
+        layer.open({
+            type: 2
+            , title: 0 == id ? "新增" : "修改"
+            , area: ['770px', '630px']
+            , btn: ['确定', '取消']
+            , shadeClose: true
+            , content: ['${ctx.contextPath}/sysUser/sysUserForm?id=' + id, 'no']
             , yes: function (index, layero) {
                 var body = layer.getChildFrame('body', index);
                 $.ajax({
@@ -181,6 +105,7 @@
         });
     }
 
+    //根据ids删除
     function deleteByIds(ids) {
         $.ajax({
             type: "POST",

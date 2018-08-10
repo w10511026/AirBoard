@@ -13,16 +13,19 @@
 <script src="${ctx.contextPath}/js/plugins/iCheck/icheck.min.js"></script>
 <script src="${ctx.contextPath}/js/plugins/webuploader/webuploader.min.js"></script>
 <script>
-    layui.use(['layer', 'form'], function(){
-        var layer = layui.layer
-            ,form = layui.form;
+    //layer全局设置
+    layui.use(['layer', 'form'], function () {
+        var layer = layui.layer, form = layui.form;
     });
 
+    //设置bootstrap table默认配置
+    var $iTable = $('#table');
     $.extend($.fn.bootstrapTable.defaults, {
         method: 'get',                      //请求方式（*）
         toolbar: '#toolbar',                //工具按钮用哪个容器
         striped: true,                      //是否显示行间隔色
         cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        queryParams: queryParams,
         pagination: true,                   //是否显示分页（*）
         sortable: true,                    //是否启用排序
         sortOrder: "desc",                   //排序方式
@@ -40,6 +43,64 @@
         uniqueId: "Id",                     //每一行的唯一标识，一般为主键列
         cardView: false,                    //是否显示详细视图
         detailView: false,                  //是否显示父子表
+        onLoadSuccess: function () {
+        },
+        onLoadError: function () {
+        }
+    });
+
+    //通用查询参数
+    function queryParams(params) {
+        var param = {};
+        $('#searchForm').find('[name]').each(function () {
+            param[$(this).attr('name')] = $(this).val();
+        });
+        param['pageSize'] = params.limit;
+        param['pageIndex'] = (params.offset / params.limit) + 1;
+        param["sortField"] = params.sort;      //排序列名
+        param["sortOrder"] = params.order; //排位命令（desc，asc）
+        return param;
+    }
+
+    //查询通用方法
+    $("#searchBtn").click(function () {
+        $iTable.bootstrapTable('refresh');
+    });
+    //重置通用方法
+    $("#resetBtn").click(function () {
+        $('#searchForm').find('[name]').each(function () {
+            $(this).val('');
+        });
+    });
+    //删除通用方法
+    $("#deleteBtn").click(function () {
+        var selectedRaido = $iTable.bootstrapTable('getSelections');
+        if (selectedRaido.length === 0) {
+            layer.msg("请先选择要删除的行！");
+            return;
+        }
+        layer.confirm('确定要删除该信息吗？', {
+            btn: ['确定', '取消']
+        }, function () {
+            deleteByIds(selectedRaido[0].id);
+        }, function (index) {
+            layer.close(index);
+        });
+    });
+    //增加通用方法
+    $("#addBtn").click(function () {
+        addOrUpdate(0);
+    });
+    //修改通用方法
+    $("#editBtn").click(function () {
+        var selectedRaido = $iTable.bootstrapTable('getSelections');
+        if (selectedRaido.length === 0) {
+            layer.msg("请先选择要编辑的行！");
+        } else if (selectedRaido.length > 1) {
+            layer.msg("只能选择一条数据！");
+        } else {
+            addOrUpdate(selectedRaido[0].id);
+        }
     });
 </script>
 </body>

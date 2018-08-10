@@ -4,6 +4,9 @@ import com.airboard.core.annotation.RedisCache;
 import com.airboard.core.base.BasePage;
 import com.airboard.core.dao.system.SysUserMapper;
 import com.airboard.core.dao.system.SysUserRepository;
+import com.airboard.core.enums.SysUserSexEnum;
+import com.airboard.core.enums.SysUserStatusEnum;
+import com.airboard.core.enums.SysUserTypeEnum;
 import com.airboard.core.model.system.SysUser;
 import com.airboard.core.service.system.SysUserService;
 import com.airboard.core.vo.SysPermissionVO;
@@ -37,23 +40,38 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private SysUserRepository sysUserRepository;
 
     @Override
-    public IPage<SysUser> listIPageByCondition(BasePage basePage, SysUserVO sysUserVO) {
+    public IPage<SysUserVO> listIPageByCondition(BasePage basePage, SysUserVO sysUserVO) {
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(sysUserVO, sysUser);
         QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
         if (StringUtils.isNotEmpty(sysUser.getUserName())) {
             wrapper.like("user_name", sysUser.getUserName());
         }
-        IPage<SysUser> page = new Page<>(basePage.getPageIndex(), basePage.getPageSize());
-        return sysUserMapper.selectPage(page, wrapper);
+        IPage<SysUserVO> result = new Page<>();
+        IPage<SysUser> page = sysUserMapper.selectPage(new Page<SysUser>(basePage.getPageIndex(), basePage.getPageSize()), wrapper);
+        if (null != page && CollectionUtils.isNotEmpty(page.getRecords())) {
+            List<SysUserVO> sysUserVOList = Lists.newArrayList();
+            for (SysUser record : page.getRecords()) {
+                SysUserVO userVO = new SysUserVO();
+                BeanUtils.copyProperties(record, userVO);
+                userVO.setUserTypeZh(SysUserTypeEnum.getEnumByType(record.getUserType()).name);
+                userVO.setSexZh(SysUserSexEnum.getEnumByType(record.getSex()).name);
+                userVO.setStatusZh(SysUserStatusEnum.getEnumByType(record.getStatus()).name);
+                sysUserVOList.add(userVO);
+            }
+            result.setTotal(page.getTotal());
+            result.setRecords(sysUserVOList);
+        }
+        return result;
     }
 
     @Override
-    public org.springframework.data.domain.Page<SysUser> listPageByCondition(BasePage basePage, SysUserVO sysUserVO) {
+    public org.springframework.data.domain.Page<SysUserVO> listPageByCondition(BasePage basePage, SysUserVO sysUserVO) {
         Pageable pageable = PageRequest.of(basePage.getPageIndex(), basePage.getPageSize(), new Sort(Sort.Direction.ASC, "id"));
-        SysUser sysUser = new SysUser();
+        SysUserVO sysUser = new SysUserVO();
         BeanUtils.copyProperties(sysUserVO, sysUser);
-        return sysUserRepository.findAll(Example.of(sysUser), pageable);
+        //return sysUserRepository.findAll(Example.of(sysUser), pageable);
+        return null;
     }
 
     @RedisCache(type = SysUserVO.class)

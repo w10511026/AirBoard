@@ -11,22 +11,22 @@ public enum SysUserStatusEnum {
 
     @Getter
     @Setter
-    public final Integer type;
+    public final int type;
     @Getter
     @Setter
     public String name;
 
-    SysUserStatusEnum(Integer type, String name) {
+    SysUserStatusEnum(int type, String name) {
         this.type = type;
         this.name = name;
     }
 
-    public SysUserStatusEnum getEnumByType(Integer type) {
+    public static SysUserStatusEnum getEnumByType(int type) {
         for (SysUserStatusEnum value : SysUserStatusEnum.values()) {
-            if (value.getType().equals(type)) {
+            if (value.getType() == type) {
                 return value;
             }
         }
-        return null;
+        return SysUserStatusEnum.valueOf(SysUserStatusEnum.class, "-");
     }
 }

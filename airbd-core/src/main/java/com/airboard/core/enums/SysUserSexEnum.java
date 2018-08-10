@@ -11,22 +11,22 @@ public enum SysUserSexEnum {
 
     @Getter
     @Setter
-    public final Integer type;
+    public final int type;
     @Getter
     @Setter
     public String name;
 
-    SysUserSexEnum(Integer type, String name) {
+    SysUserSexEnum(int type, String name) {
         this.type = type;
         this.name = name;
     }
 
-    public SysUserSexEnum getEnumByType(Integer type) {
+    public static SysUserSexEnum getEnumByType(int type) {
         for (SysUserSexEnum value : SysUserSexEnum.values()) {
-            if (value.getType().equals(type)) {
+            if (value.getType() == type) {
                 return value;
             }
         }
-        return null;
+        return SysUserSexEnum.valueOf(SysUserSexEnum.class, "-");
     }
 }

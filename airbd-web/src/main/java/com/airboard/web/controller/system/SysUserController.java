@@ -1,6 +1,5 @@
 package com.airboard.web.controller.system;
 
-
 import com.airboard.core.base.BaseController;
 import com.airboard.core.base.BasePage;
 import com.airboard.core.base.BaseResult;
@@ -48,7 +47,7 @@ public class SysUserController extends BaseController {
     public BaseResult listSysUserPage(BasePage basePage, SysUserVO sysUserVO) {
         BaseResult result = new BaseResult();
         try {
-            IPage<SysUser> resultPage = sysUserService.listIPageByCondition(basePage, sysUserVO);
+            IPage<SysUserVO> resultPage = sysUserService.listIPageByCondition(basePage, sysUserVO);
             result.setData(resultPage);
         } catch (Exception e) {
             log.error("listSysUserPage -=- {}", e.toString());
@@ -57,7 +56,7 @@ public class SysUserController extends BaseController {
     }
 
     @GetMapping("/sysUserForm")
-    public String toDetail(Long id, Model model) {
+    public String sysUserForm(Long id, Model model) {
         try {
             SysUserVO sysUserVO = new SysUserVO();
             if (NumberUtils.isNotEmpty(id)) {
@@ -78,13 +77,13 @@ public class SysUserController extends BaseController {
      * 保存和修改
      */
     @ResponseBody
-    @PostMapping("/save")
-    public BaseResult save(SysUserVO sysUserVO) {
+    @PostMapping("/addOrUpdate")
+    public BaseResult addOrUpdate(SysUserVO sysUserVO) {
         BaseResult result = new BaseResult(true, "操作成功！");
         try {
             sysUserService.insertOrUpdate(sysUserVO);
         } catch (Exception e) {
-            log.error("sysUserSave -=- {}", e.toString());
+            log.error("addOrUpdate -=- {}", e.toString());
         }
         return result;
     }
@@ -99,7 +98,7 @@ public class SysUserController extends BaseController {
         try {
             sysUserService.deleteById(id);
         } catch (Exception e) {
-            log.error("sysUserDelete -=- {}", e.toString());
+            log.error("sysUser delete -=- {}", e.toString());
         }
         return result;
     }

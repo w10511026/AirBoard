@@ -3,7 +3,7 @@ package com.airboard.core.enums;
 
 public enum SysUserTypeEnum {
 
-    REGISTER_USER(1, "普通用户");
+    REGISTER_USER(1, "注册用户");
 
     public final int type;
     public final String name;
@@ -21,12 +21,12 @@ public enum SysUserTypeEnum {
         return this.type;
     }
 
-    public SysUserTypeEnum getEnumByType(int type) {
+    public static SysUserTypeEnum getEnumByType(int type) {
         for (SysUserTypeEnum value : SysUserTypeEnum.values()) {
             if (value.getType() == type) {
                 return value;
             }
         }
-        return null;
+        return SysUserTypeEnum.valueOf(SysUserTypeEnum.class, "-");
     }
 }
