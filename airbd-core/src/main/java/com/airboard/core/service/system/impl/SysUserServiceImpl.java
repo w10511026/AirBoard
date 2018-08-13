@@ -45,7 +45,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         BeanUtils.copyProperties(sysUserVO, sysUser);
         QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
         if (StringUtils.isNotEmpty(sysUser.getUserName())) {
-            wrapper.like("user_name", sysUser.getUserName());
+            wrapper.lambda().like(SysUser::getUserName, sysUser.getUserName());
         }
         IPage<SysUserVO> result = new Page<>();
         IPage<SysUser> page = sysUserMapper.selectPage(new Page<SysUser>(basePage.getPageIndex(), basePage.getPageSize()), wrapper);
@@ -66,12 +66,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public org.springframework.data.domain.Page<SysUserVO> listPageByCondition(BasePage basePage, SysUserVO sysUserVO) {
+    public org.springframework.data.domain.Page<SysUser> listPageByCondition(BasePage basePage, SysUserVO sysUserVO) {
         Pageable pageable = PageRequest.of(basePage.getPageIndex(), basePage.getPageSize(), new Sort(Sort.Direction.ASC, "id"));
-        SysUserVO sysUser = new SysUserVO();
+        SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(sysUserVO, sysUser);
-        //return sysUserRepository.findAll(Example.of(sysUser), pageable);
-        return null;
+        return sysUserRepository.findAll(Example.of(sysUser), pageable);
     }
 
     @RedisCache(type = SysUserVO.class)

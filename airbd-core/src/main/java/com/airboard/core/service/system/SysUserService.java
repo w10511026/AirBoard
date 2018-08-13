@@ -25,7 +25,7 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * JPA分页方法
      */
-    Page<SysUserVO> listPageByCondition(BasePage basePage, SysUserVO sysUserVO);
+    Page<SysUser> listPageByCondition(BasePage basePage, SysUserVO sysUserVO);
 
     List<SysUserVO> getByUserName(String userName);
 
