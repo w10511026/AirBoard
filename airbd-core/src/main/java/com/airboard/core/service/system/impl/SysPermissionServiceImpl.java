@@ -1,5 +1,6 @@
 package com.airboard.core.service.system.impl;
 
+import com.airboard.core.dao.system.SysPermissionRepository;
 import com.airboard.core.model.system.SysPermission;
 import com.airboard.core.dao.system.SysPermissionMapper;
 import com.airboard.core.service.system.SysPermissionService;
@@ -17,6 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, SysPermission> implements SysPermissionService {
     @Autowired
+    SysPermissionRepository sysPermissionRepository;
+    @Autowired
     private SysPermissionMapper sysPermissionMapper;
+
+    @Override
+    public Integer countByPermission(String permission) {
+        return sysPermissionRepository.countByPermission(permission);
+    }
 
 }

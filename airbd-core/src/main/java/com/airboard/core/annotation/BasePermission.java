@@ -15,8 +15,8 @@ public @interface BasePermission {
     String name();
     //权限标识
     String value();
-    //权限级别
-    int level() default 1;
+    //父类标识
+    String parent();
     //是否是菜单
     boolean isMenu() default false;
 

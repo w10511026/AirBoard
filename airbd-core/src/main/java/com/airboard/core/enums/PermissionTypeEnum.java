@@ -8,9 +8,10 @@ import lombok.Setter;
  * @Author <a href="mailto:wangshuo@ebnew.com">Wangshuo</a>
  * @Date 2018/8/10
  */
-public enum BaseMenuEnum {
+public enum PermissionTypeEnum {
 
-    SYSTEM_MANAGE(1, "系统管理");
+    MENU(1, "菜单"),
+    PERMISSION(2, "权限");
 
     @Getter
     @Setter
@@ -19,17 +20,17 @@ public enum BaseMenuEnum {
     @Setter
     public String name;
 
-    BaseMenuEnum(int type, String name) {
+    PermissionTypeEnum(int type, String name) {
         this.type = type;
         this.name = name;
     }
 
-    public static BaseMenuEnum getEnumByType(int type) {
-        for (BaseMenuEnum value : BaseMenuEnum.values()) {
+    public static PermissionTypeEnum getEnumByType(int type) {
+        for (PermissionTypeEnum value : PermissionTypeEnum.values()) {
             if (value.getType() == type) {
                 return value;
             }
         }
-        return BaseMenuEnum.valueOf(BaseMenuEnum.class, "-");
+        return PermissionTypeEnum.valueOf(PermissionTypeEnum.class, "-");
     }
 }

@@ -1,6 +1,8 @@
 package com.airboard.web.controller.system;
 
+import com.airboard.core.annotation.BasePermission;
 import com.airboard.core.base.BaseController;
+import com.airboard.core.base.BaseMenu;
 import com.airboard.core.base.BasePage;
 import com.airboard.core.base.BaseResult;
 import com.airboard.core.enums.SysUserSexEnum;
@@ -16,10 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @Slf4j
@@ -34,16 +33,18 @@ public class SysUserController extends BaseController {
     /**
      * 跳转列表页面
      */
-    @GetMapping("/index")
+    @BasePermission(name = "用户管理", value = "sysuser:index", parent = BaseMenu.SYSTEM_MANAGE, isMenu = true)
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index() {
         return BASE_DIR + "sysUserList";
     }
 
     /**
-     * 分页查询数据
+     * 分页列表查询
      */
+    @BasePermission(name = "用户管理-列表查询", value = "sysuser:listsysuserpage", parent = "sysuser:index")
     @ResponseBody
-    @GetMapping("/listSysUserPage")
+    @RequestMapping(value = "/listSysUserPage", method = RequestMethod.GET)
     public BaseResult listSysUserPage(BasePage basePage, SysUserVO sysUserVO) {
         BaseResult result = new BaseResult();
         try {
@@ -55,7 +56,8 @@ public class SysUserController extends BaseController {
         return result;
     }
 
-    @GetMapping("/sysUserForm")
+    @BasePermission(name = "用户管理-详细", value = "sysuser:sysuserform", parent = "sysuser:index")
+    @RequestMapping(value = "/sysUserForm", method = RequestMethod.GET)
     public String sysUserForm(Long id, Model model) {
         try {
             SysUserVO sysUserVO = new SysUserVO();
@@ -77,7 +79,7 @@ public class SysUserController extends BaseController {
      * 保存和修改
      */
     @ResponseBody
-    @PostMapping("/addOrUpdate")
+    @RequestMapping(value = "/addOrUpdate", method = RequestMethod.POST)
     public BaseResult addOrUpdate(SysUserVO sysUserVO) {
         BaseResult result = new BaseResult(true, "操作成功！");
         try {
@@ -92,7 +94,7 @@ public class SysUserController extends BaseController {
      * 根据id删除对象
      */
     @ResponseBody
-    @PostMapping("/delete")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public BaseResult delete(Long... id) {
         BaseResult result = new BaseResult(true, "删除成功！");
         try {
