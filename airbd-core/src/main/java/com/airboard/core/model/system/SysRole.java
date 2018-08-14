@@ -38,6 +38,12 @@ public class SysRole extends BaseObject<SysRole> {
     @TableField(exist = false)
     private List<SysPermission> permissions;
 
+    // 一个角色对应多个用户
+    @ManyToMany
+    @JoinTable(name="sys_user_role",joinColumns={@JoinColumn(name="role_id")},inverseJoinColumns={@JoinColumn(name="user_id")})
+    @TableField(exist = false)
+    private List<SysUser> users;
+
     @Override
     protected Serializable pkVal() {
         return this.id;

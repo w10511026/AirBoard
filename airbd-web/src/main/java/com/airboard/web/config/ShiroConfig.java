@@ -4,6 +4,10 @@ import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.Cookie;
+import org.apache.shiro.web.servlet.ShiroHttpSession;
+import org.apache.shiro.web.servlet.SimpleCookie;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -40,7 +44,30 @@ public class ShiroConfig {
     public DefaultWebSecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(iShiroRealm());
+        securityManager.setCacheManager(iRedisCacheManager());
+        securityManager.setSessionManager(sessionManager());
         return securityManager;
+    }
+    @Bean
+    public IRedisCacheManager iRedisCacheManager() {
+        return new IRedisCacheManager();
+    }
+
+    @Bean
+    public DefaultWebSessionManager sessionManager() {
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        sessionManager.setSessionDAO(iRedisSessionDao());
+        //创建会话Cookie
+        Cookie cookie = new SimpleCookie(ShiroHttpSession.DEFAULT_SESSION_ID_NAME);
+        cookie.setName("WEBID");
+        cookie.setHttpOnly(true);
+        sessionManager.setSessionIdCookie(cookie);
+        return sessionManager;
+    }
+
+    @Bean
+    public IRedisSessionDao iRedisSessionDao() {
+        return new IRedisSessionDao();
     }
 
     @Bean

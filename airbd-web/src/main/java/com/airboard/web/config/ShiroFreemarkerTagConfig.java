@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * @Description 页面上配置shiro标签
  */
 @Component
-public class ShiroTagConfig implements InitializingBean {
+public class ShiroFreemarkerTagConfig implements InitializingBean {
 
     @Autowired
     private Configuration configuration;

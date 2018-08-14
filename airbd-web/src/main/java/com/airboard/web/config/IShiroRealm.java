@@ -1,9 +1,9 @@
 package com.airboard.web.config;
 
+import com.airboard.core.enums.SysUserStatusEnum;
 import com.airboard.core.service.system.SysUserService;
 import com.airboard.core.vo.SysRoleVO;
 import com.airboard.core.vo.SysUserVO;
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -19,6 +19,7 @@ import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
+import javax.security.auth.login.AccountLockedException;
 import java.util.List;
 
 /**
@@ -48,6 +49,9 @@ public class IShiroRealm extends AuthorizingRealm {
             throw new UnauthorizedException("User didn't existed!");
         }
         SysUserVO sysUser = userList.get(0);
+        if (sysUser.getStatus().equals(SysUserStatusEnum.UNABLE.type)) {
+            throw new UnauthorizedException("Account is locked!");
+        }
         return new SimpleAuthenticationInfo(sysUser, sysUser.getPassWord(), ByteSource.Util.bytes(sysUser.getSalt()), getName());
     }
 

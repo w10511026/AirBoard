@@ -4,7 +4,6 @@ import com.airboard.core.annotation.BasePermission;
 import com.airboard.core.enums.PermissionTypeEnum;
 import com.airboard.core.model.system.SysPermission;
 import com.airboard.core.service.system.SysPermissionService;
-import com.airboard.core.util.IdWorker;
 import com.airboard.core.util.NumberUtils;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.ArrayUtils;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.util.IdGenerator;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -53,13 +51,13 @@ public class PermissionCollect implements BeanPostProcessor {
                         SysPermission sysPermission = new SysPermission();
                         sysPermission.setName(basePermission.name());
                         sysPermission.setPermission(permission);
-                        sysPermission.setParent(basePermission.parent());
+                        sysPermission.setParentId(basePermission.parent());
                         if (basePermission.isMenu()) {
                             sysPermission.setType(PermissionTypeEnum.MENU.type);
                         } else {
                             sysPermission.setType(PermissionTypeEnum.PERMISSION.type);
                         }
-                        sysPermission.setAccessUrl(requestUrl);
+                        sysPermission.setUrl(requestUrl);
                         sysPermissionService.insert(sysPermission);
                     }
                 }

@@ -1,10 +1,7 @@
 package com.airboard.core.aop;
 
 import com.airboard.core.annotation.RedisCache;
-import com.airboard.core.base.JedisTemplate;
-import com.alibaba.fastjson.JSON;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.collections.CollectionUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -12,14 +9,11 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * @Description
@@ -32,7 +26,7 @@ import java.util.List;
 public class RedisCacheAspect {
 
     @Autowired
-    private JedisTemplate jedisTemplate;
+    private RedisTemplate redisTemplate;
 
     @Pointcut("execution(public * com.airboard.core.service..*.*(..))")
     public void webAspect() {
@@ -57,11 +51,11 @@ public class RedisCacheAspect {
         Method method = pjp.getTarget().getClass().getMethod(methodSignature.getName(), methodSignature.getParameterTypes());
         //得到被代理的方法上的注解
         RedisCache annotation = method.getAnnotation(RedisCache.class);
-        Object result = null;
+        Object result = pjp.proceed(args);
         if (null == annotation) {
             //方法未设置缓存,正常执行
             result = pjp.proceed(args);
-        } else if (!jedisTemplate.exists(key)) {
+        }/* else if (!redisTemplate.exists(key)) {
             log.info("########缓存未命中########");
             int cacheTime = annotation.cacheTime();
             //缓存不存在，则调用原方法，并将结果放入缓存中
@@ -86,7 +80,7 @@ public class RedisCacheAspect {
             } else {
                 result = JSON.parseObject(redisResult, clazz);
             }
-        }
+        }*/
         return result;
     }
 
