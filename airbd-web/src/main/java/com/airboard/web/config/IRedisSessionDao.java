@@ -1,12 +1,9 @@
 package com.airboard.web.config;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.io.Serializable;
@@ -20,15 +17,9 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class IRedisSessionDao extends CachingSessionDAO {
 
-    @Getter
-    @Setter
-    @Value("${shiro.session.session-prefix}")
-    private String sessionPrefix;
+    private final static String sessionPrefix = "shiro-redis-session:";
 
-    @Getter
-    @Setter
-    @Value("${shiro.session.session-time}")
-    private int sessionTime;
+    private final static int sessionTime = 1800;
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;

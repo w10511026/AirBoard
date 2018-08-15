@@ -1,11 +1,8 @@
 package com.airboard.web.config;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -22,15 +19,9 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class IRedisCache<K, V> implements Cache<K, V> {
 
-    @Getter
-    @Setter
-    @Value("${shiro.cache.cache-prefix}")
-    private String cachePrefix;
+    private final static String cachePrefix = "shiro-redis-cache:";
 
-    @Getter
-    @Setter
-    @Value("${shiro.cache.cache-time}")
-    private int cacheTime;
+    private final static int cacheTime = 180;
 
     private String cacheKey;
 
@@ -92,7 +83,7 @@ public class IRedisCache<K, V> implements Cache<K, V> {
             V v = get(key);
             redisTemplate.delete(getCacheKey(key));
             return v;
-        }catch (Throwable t){
+        } catch (Throwable t) {
             throw new CacheException(t);
         }
     }
