@@ -4,8 +4,6 @@ import org.apache.shiro.authc.AuthenticationToken;
 
 /**
  * @Description
- * @Author <a href="mailto:wangshuo@ebnew.com">Wangshuo</a>
- * @Date 2018/8/15
  */
 public class JWTToken implements AuthenticationToken {
 
@@ -26,3 +24,4 @@ public class JWTToken implements AuthenticationToken {
         return token;
     }
 }
+

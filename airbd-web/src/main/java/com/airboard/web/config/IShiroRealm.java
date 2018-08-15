@@ -51,7 +51,7 @@ public class IShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         String token = (String) authenticationToken.getCredentials();
-        String userName = JWTUtil.getUsername(token);
+        String userName = JWTUtil.getUserName(token);
         if (userName == null) {
             throw new AuthenticationException("token invalid");
         }
