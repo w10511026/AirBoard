@@ -2,6 +2,7 @@ package com.airboard.web.controller;
 
 import com.airboard.core.base.BaseController;
 import com.airboard.core.base.BaseResult;
+import com.airboard.core.util.JWTUtil;
 import com.airboard.core.vo.SysUserVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -53,6 +54,7 @@ public class LoginController extends BaseController {
             token.clear();
             return new BaseResult("用户或密码错误！");
         }
+        result.setData(JWTUtil.sign(userBO.getUserName(), userBO.getPassWord()));
         return result;
     }
 

@@ -2,6 +2,7 @@ package com.airboard.web.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.ValidatingSession;
 import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -39,6 +40,10 @@ public class IRedisSessionDao extends CachingSessionDAO {
 
     @Override
     protected void doUpdate(Session session) {
+        //如果会话过期/停止 没必要再更新了
+        if (session instanceof ValidatingSession && !((ValidatingSession) session).isValid()) {
+            return;
+        }
         log.debug("updateSession:{}", session.getId().toString());
         String key = getKey(session.getId().toString());
         redisTemplate.opsForValue().set(key, session, sessionTime, TimeUnit.MINUTES);
@@ -54,10 +59,10 @@ public class IRedisSessionDao extends CachingSessionDAO {
     protected Session doReadSession(Serializable sessionId) {
         log.debug("readSession:{}", sessionId.toString());
         // 先从缓存中获取session，如果没有再去数据库中获取
-        Session session = null;
-        if (session == null) {
-            session = (Session) redisTemplate.opsForValue().get(getKey(sessionId.toString()));
+        Object sessionObj = redisTemplate.opsForValue().get(getKey(sessionId.toString()));
+        if (sessionObj == null) {
+            return null;
         }
-        return session;
+        return (Session) sessionObj;
     }
 }

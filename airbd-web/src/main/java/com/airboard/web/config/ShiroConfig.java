@@ -1,6 +1,8 @@
 package com.airboard.web.config;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.session.SessionListener;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -11,8 +13,7 @@ import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Configuration
 public class ShiroConfig {
@@ -41,36 +42,6 @@ public class ShiroConfig {
     }
 
     @Bean
-    public DefaultWebSecurityManager securityManager() {
-        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealm(iShiroRealm());
-        securityManager.setCacheManager(iRedisCacheManager());
-        securityManager.setSessionManager(sessionManager());
-        return securityManager;
-    }
-    @Bean
-    public IRedisCacheManager iRedisCacheManager() {
-        return new IRedisCacheManager();
-    }
-
-    @Bean
-    public DefaultWebSessionManager sessionManager() {
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        sessionManager.setSessionDAO(iRedisSessionDao());
-        //创建会话Cookie
-        Cookie cookie = new SimpleCookie(ShiroHttpSession.DEFAULT_SESSION_ID_NAME);
-        cookie.setName("WEBID");
-        cookie.setHttpOnly(true);
-        sessionManager.setSessionIdCookie(cookie);
-        return sessionManager;
-    }
-
-    @Bean
-    public IRedisSessionDao iRedisSessionDao() {
-        return new IRedisSessionDao();
-    }
-
-    @Bean
     public IShiroRealm iShiroRealm() {
         IShiroRealm iShiroRealm = new IShiroRealm();
         iShiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
@@ -91,6 +62,44 @@ public class ShiroConfig {
         //散列的次数，比如散列两次，相当于 md5(md5(""))
         hashedCredentialsMatcher.setHashIterations(2);
         return hashedCredentialsMatcher;
+    }
+
+    @Bean
+    public IRedisSessionDao iRedisSessionDao() {
+        return new IRedisSessionDao();
+    }
+
+    @Bean
+    public ISessionListener iSessionListener() {
+        return new ISessionListener();
+    }
+
+    @Bean
+    public DefaultWebSessionManager sessionManager() {
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        sessionManager.setSessionDAO(iRedisSessionDao());
+        //创建会话Cookie
+        Cookie cookie = new SimpleCookie(ShiroHttpSession.DEFAULT_SESSION_ID_NAME);
+        cookie.setHttpOnly(true);
+        sessionManager.setSessionIdCookie(cookie);
+        Collection<SessionListener> listeners = new ArrayList<>();
+        listeners.add(iSessionListener());
+        sessionManager.setSessionListeners(listeners);
+        return sessionManager;
+    }
+
+    @Bean
+    public IRedisCacheManager iRedisCacheManager() {
+        return new IRedisCacheManager();
+    }
+
+    @Bean
+    public DefaultWebSecurityManager securityManager() {
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        securityManager.setRealm(iShiroRealm());
+        securityManager.setCacheManager(iRedisCacheManager());
+        securityManager.setSessionManager(sessionManager());
+        return securityManager;
     }
 
     /**

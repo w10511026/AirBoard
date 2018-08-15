@@ -2,6 +2,8 @@ package com.airboard.web.config;
 
 import com.airboard.core.enums.SysUserStatusEnum;
 import com.airboard.core.service.system.SysUserService;
+import com.airboard.core.util.JWTToken;
+import com.airboard.core.util.JWTUtil;
 import com.airboard.core.vo.SysRoleVO;
 import com.airboard.core.vo.SysUserVO;
 import com.google.common.collect.Lists;
@@ -38,21 +40,33 @@ public class IShiroRealm extends AuthorizingRealm {
     @Autowired
     SysUserService sysUserService;
 
+    @Override
+    public boolean supports(AuthenticationToken token) {
+        return token instanceof JWTToken;
+    }
+
     /**
      * @Description: 认证方法
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        String userName = (String) token.getPrincipal();
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
+        String token = (String) authenticationToken.getCredentials();
+        String userName = JWTUtil.getUsername(token);
+        if (userName == null) {
+            throw new AuthenticationException("token invalid");
+        }
         List<SysUserVO> userList = sysUserService.getByUserName(userName);
         if (CollectionUtils.isEmpty(userList)) {
-            throw new UnauthorizedException("User didn't existed!");
+            throw new AuthenticationException("User didn't existed!");
         }
         SysUserVO sysUser = userList.get(0);
         if (sysUser.getStatus().equals(SysUserStatusEnum.UNABLE.type)) {
-            throw new UnauthorizedException("Account is locked!");
+            throw new AuthenticationException("Account is locked!");
         }
-        return new SimpleAuthenticationInfo(sysUser, sysUser.getPassWord(), ByteSource.Util.bytes(sysUser.getSalt()), getName());
+        if (!JWTUtil.verify(token, userName, sysUser.getPassWord())) {
+            throw new UnauthorizedException("Username or password error");
+        }
+        return new SimpleAuthenticationInfo(sysUser, token, ByteSource.Util.bytes(sysUser.getSalt()), getName());
     }
 
     /**
