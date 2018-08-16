@@ -18,7 +18,6 @@ import java.util.List;
 
 public class JWTFilter extends BasicHttpAuthenticationFilter {
 
-    @Lazy
     @Autowired
     private SysUserService sysUserService;
 

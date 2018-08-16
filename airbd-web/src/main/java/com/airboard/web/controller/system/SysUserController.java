@@ -1,6 +1,7 @@
 package com.airboard.web.controller.system;
 
 import com.airboard.core.annotation.BasePermission;
+import com.airboard.core.annotation.CurrentUser;
 import com.airboard.core.base.BaseController;
 import com.airboard.core.base.BaseMenu;
 import com.airboard.core.base.BasePage;
@@ -45,7 +46,7 @@ public class SysUserController extends BaseController {
     @BasePermission(name = "用户管理-列表查询", value = "sysuser:listsysuserpage", parent = "sysuser:index")
     @ResponseBody
     @RequestMapping(value = "/listSysUserPage", method = RequestMethod.GET)
-    public BaseResult listSysUserPage(BasePage basePage, SysUserVO sysUserVO) {
+    public BaseResult listSysUserPage(@CurrentUser SysUserVO sysUserVO, BasePage basePage) {
         BaseResult result = new BaseResult();
         try {
             IPage<SysUserVO> resultPage = sysUserService.listIPageByCondition(basePage, sysUserVO);

@@ -108,10 +108,3 @@ logging:
   file: airbd-web.log
   level:
     root: info
-
-#shiro缓存前缀
-shiro:
-  cache:
-    cache-prefix: shiro-redis-cache:
-    #shiro缓存在redis过期时间是(分钟)
-    cache-time: 180
