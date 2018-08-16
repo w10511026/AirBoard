@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: AIRBD-ASYN
+  rabbitmq:
+    host: 47.106.15.76
+    port: 5672
+    username: guest
+    password: guest
