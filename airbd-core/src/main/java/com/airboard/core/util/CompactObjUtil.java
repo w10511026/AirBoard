@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * 对比两个对象的变化的工具类
  */
-public class SimpleContrast {
+public class CompactObjUtil {
 
     //记录每个修改字段的分隔符
     public static final String separator = ";;;";
