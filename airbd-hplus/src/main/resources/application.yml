@@ -4,10 +4,6 @@ server:
   port: 80
 
 spring:
-  application:
-    name: AIRBD-API
-  banner:
-    location: /config/banner.txt
   resources:
     static-locations: classpath:/META-INF/resources/,classpath:/resources/static/,classpath:/static/,classpath:/resources/templates/,classpath:/templates/
   freemarker:
