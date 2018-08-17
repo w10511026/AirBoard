@@ -4,8 +4,8 @@ import com.airboard.client.enums.SysUserStatusEnum;
 import com.airboard.core.util.JWTToken;
 import com.airboard.core.util.JWTUtil;
 import com.airboard.api.service.system.SysUserService;
-import com.airboard.api.vo.system.SysRoleVO;
-import com.airboard.api.vo.system.SysUserVO;
+import com.airboard.client.dto.system.SysRoleDTO;
+import com.airboard.client.dto.system.SysUserDTO;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -54,11 +54,11 @@ public class IShiroRealm extends AuthorizingRealm {
         if (userName == null) {
             throw new AuthenticationException("token invalid");
         }
-        List<SysUserVO> userList = sysUserService.getByUserName(userName);
+        List<SysUserDTO> userList = sysUserService.getByUserName(userName);
         if (CollectionUtils.isEmpty(userList)) {
             throw new AuthenticationException("User didn't existed!");
         }
-        SysUserVO sysUser = userList.get(0);
+        SysUserDTO sysUser = userList.get(0);
         if (sysUser.getStatus().equals(SysUserStatusEnum.UNABLE.type)) {
             throw new AuthenticationException("Account is locked!");
         }
@@ -73,8 +73,8 @@ public class IShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        SysUserVO sysUser = (SysUserVO) principalCollection.getPrimaryPrincipal();
-        List<SysRoleVO> roleVOS = sysUser.getRoles();
+        SysUserDTO sysUser = (SysUserDTO) principalCollection.getPrimaryPrincipal();
+        List<SysRoleDTO> roleVOS = sysUser.getRoles();
         List<String> roleNameList = Lists.newArrayList();
         List<String> permissionNameList = Lists.newArrayList();
         if (CollectionUtils.isNotEmpty(roleVOS)) {

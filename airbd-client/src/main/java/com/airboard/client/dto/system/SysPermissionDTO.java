@@ -1,6 +1,5 @@
-package com.airboard.api.vo.system;
+package com.airboard.client.dto.system;
 
-import com.airboard.core.base.BaseObject;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
@@ -8,7 +7,7 @@ import java.io.Serializable;
 
 @Data
 @ApiModel("权限信息")
-public class SysPermissionVO extends BaseObject<SysPermissionVO> {
+public class SysPermissionDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -17,10 +16,5 @@ public class SysPermissionVO extends BaseObject<SysPermissionVO> {
     private Integer type;
 
     private Integer level;
-
-    @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
 
 }

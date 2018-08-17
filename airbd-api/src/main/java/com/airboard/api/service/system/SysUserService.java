@@ -2,7 +2,7 @@ package com.airboard.api.service.system;
 
 import com.airboard.core.base.BasePage;
 import com.airboard.api.model.system.SysUser;
-import com.airboard.api.vo.system.SysUserVO;
+import com.airboard.client.dto.system.SysUserDTO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.data.domain.Page;
@@ -20,15 +20,15 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * mybatis分页方法
      */
-    IPage<SysUserVO> listIPageByCondition(BasePage basePage, SysUserVO sysUserVO);
+    IPage<SysUserDTO> listIPageByCondition(BasePage basePage, SysUserDTO sysUserVO);
 
     /**
      * JPA分页方法
      */
-    Page<SysUser> listPageByCondition(BasePage basePage, SysUserVO sysUserVO);
+    Page<SysUser> listPageByCondition(BasePage basePage, SysUserDTO sysUserVO);
 
-    List<SysUserVO> getByUserName(String userName);
+    List<SysUserDTO> getByUserName(String userName);
 
-    void insertOrUpdate(SysUserVO sysUserVO);
+    void insertOrUpdate(SysUserDTO sysUserVO);
 
 }

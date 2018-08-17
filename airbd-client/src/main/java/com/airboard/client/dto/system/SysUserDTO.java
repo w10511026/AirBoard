@@ -1,6 +1,5 @@
-package com.airboard.api.vo.system;
+package com.airboard.client.dto.system;
 
-import com.airboard.core.base.BaseObject;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
@@ -9,7 +8,7 @@ import java.util.List;
 
 @Data
 @ApiModel("系统用户vo")
-public class SysUserVO extends BaseObject {
+public class SysUserDTO implements Serializable {
 
     private String userName;
     private String passWord;
@@ -24,12 +23,8 @@ public class SysUserVO extends BaseObject {
     private String statusZh;
     private Integer cardNo;
     private String salt;
-    private List<SysRoleVO> roles;
+    private List<SysRoleDTO> roles;
     //秘钥
     private String token;
 
-    @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
 }

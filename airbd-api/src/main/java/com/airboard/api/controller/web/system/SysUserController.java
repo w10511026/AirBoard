@@ -2,7 +2,7 @@ package com.airboard.api.controller.web.system;
 
 import com.airboard.api.model.system.SysUser;
 import com.airboard.api.service.system.SysUserService;
-import com.airboard.api.vo.system.SysUserVO;
+import com.airboard.client.dto.system.SysUserDTO;
 import com.airboard.client.enums.SysUserSexEnum;
 import com.airboard.client.enums.SysUserStatusEnum;
 import com.airboard.client.enums.SysUserTypeEnum;
@@ -31,10 +31,10 @@ public class SysUserController extends BaseController {
 
     @ApiOperation(value = "分页列表")
     @GetMapping("/listSysUserPage")
-    public BaseResult listSysUserPage(@CurrentUser @RequestBody SysUserVO sysUserVO, @RequestBody BasePage basePage) {
+    public BaseResult listSysUserPage(@CurrentUser @RequestBody SysUserDTO sysUserVO, @RequestBody BasePage basePage) {
         BaseResult result = new BaseResult();
         try {
-            IPage<SysUserVO> resultPage = sysUserService.listIPageByCondition(basePage, sysUserVO);
+            IPage<SysUserDTO> resultPage = sysUserService.listIPageByCondition(basePage, sysUserVO);
             result.setData(resultPage);
         } catch (Exception e) {
             log.error("listSysUserPage -=- {}", e.toString());
@@ -47,7 +47,7 @@ public class SysUserController extends BaseController {
     public BaseResult selectById(Long id, Model model) {
         BaseResult result = new BaseResult(true, "操作成功！");
         try {
-            SysUserVO sysUserVO = new SysUserVO();
+            SysUserDTO sysUserVO = new SysUserDTO();
             if (NumberUtils.isNotEmpty(id)) {
                 SysUser sysUser = sysUserService.selectById(id);
                 BeanUtils.copyProperties(sysUser, sysUserVO);
@@ -65,7 +65,7 @@ public class SysUserController extends BaseController {
 
     @ApiOperation(value = "新增/修改")
     @PostMapping("/addOrUpdate")
-    public BaseResult addOrUpdate(SysUserVO sysUserVO) {
+    public BaseResult addOrUpdate(SysUserDTO sysUserVO) {
         BaseResult result = new BaseResult(true, "操作成功！");
         try {
             sysUserService.insertOrUpdate(sysUserVO);

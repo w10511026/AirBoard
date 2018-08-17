@@ -1,5 +1,6 @@
 package com.airboard.api.config;
 
+import com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -21,7 +22,7 @@ public class SwaggerConfig {
                 .select()
                 //这里采用包含注解的方式来确定要显示的接口
                 //.apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
-                .apis(RequestHandlerSelectors.basePackage("com.airboard.api.controller"))
+                .apis(Predicates.or(RequestHandlerSelectors.basePackage("com.airboard.api.controller"),RequestHandlerSelectors.basePackage("com.airboard.api.ms")))
                 .paths(PathSelectors.any())
                 .build();
     }

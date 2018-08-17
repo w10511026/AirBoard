@@ -9,9 +9,9 @@ import com.airboard.api.dao.system.SysUserMapper;
 import com.airboard.api.dao.system.SysUserRepository;
 import com.airboard.api.model.system.SysUser;
 import com.airboard.api.service.system.SysUserService;
-import com.airboard.api.vo.system.SysPermissionVO;
-import com.airboard.api.vo.system.SysRoleVO;
-import com.airboard.api.vo.system.SysUserVO;
+import com.airboard.client.dto.system.SysPermissionDTO;
+import com.airboard.client.dto.system.SysRoleDTO;
+import com.airboard.client.dto.system.SysUserDTO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -40,19 +40,19 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private SysUserRepository sysUserRepository;
 
     @Override
-    public IPage<SysUserVO> listIPageByCondition(BasePage basePage, SysUserVO sysUserVO) {
+    public IPage<SysUserDTO> listIPageByCondition(BasePage basePage, SysUserDTO sysUserVO) {
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(sysUserVO, sysUser);
         QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
         if (StringUtils.isNotEmpty(sysUser.getUserName())) {
             wrapper.lambda().like(SysUser::getUserName, sysUser.getUserName());
         }
-        IPage<SysUserVO> result = new Page<>();
+        IPage<SysUserDTO> result = new Page<>();
         IPage<SysUser> page = sysUserMapper.selectPage(new Page<SysUser>(basePage.getPageIndex(), basePage.getPageSize()), wrapper);
         if (null != page && CollectionUtils.isNotEmpty(page.getRecords())) {
-            List<SysUserVO> sysUserVOList = Lists.newArrayList();
+            List<SysUserDTO> sysUserVOList = Lists.newArrayList();
             for (SysUser record : page.getRecords()) {
-                SysUserVO userVO = new SysUserVO();
+                SysUserDTO userVO = new SysUserDTO();
                 BeanUtils.copyProperties(record, userVO);
                 userVO.setUserTypeZh(SysUserTypeEnum.getEnumByType(record.getUserType()).name);
                 userVO.setSexZh(SysUserSexEnum.getEnumByType(record.getSex()).name);
@@ -66,37 +66,37 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public org.springframework.data.domain.Page<SysUser> listPageByCondition(BasePage basePage, SysUserVO sysUserVO) {
+    public org.springframework.data.domain.Page<SysUser> listPageByCondition(BasePage basePage, SysUserDTO sysUserVO) {
         Pageable pageable = PageRequest.of(basePage.getPageIndex(), basePage.getPageSize(), new Sort(Sort.Direction.ASC, "id"));
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(sysUserVO, sysUser);
         return sysUserRepository.findAll(Example.of(sysUser), pageable);
     }
 
-    @RedisCache(type = SysUserVO.class)
+    @RedisCache(type = SysUserDTO.class)
     @Override
-    public List<SysUserVO> getByUserName(String userName) {
+    public List<SysUserDTO> getByUserName(String userName) {
         List<SysUser> userList = sysUserRepository.getByUserName(userName);
-        List<SysUserVO> resultList = Lists.newArrayList();
+        List<SysUserDTO> resultList = Lists.newArrayList();
         if (CollectionUtils.isNotEmpty(userList)) {
             userList.forEach(item -> {
-                SysUserVO sysUserVO = new SysUserVO();
+                SysUserDTO sysUserVO = new SysUserDTO();
                 BeanUtils.copyProperties(item, sysUserVO);
                 if (CollectionUtils.isNotEmpty(item.getRoles())) {
-                    List<SysRoleVO> roleVOList = Lists.newArrayList();
+                    List<SysRoleDTO> roleVOList = Lists.newArrayList();
                     item.getRoles().forEach(sysRole -> {
-                        SysRoleVO sysRoleVO = new SysRoleVO();
-                        BeanUtils.copyProperties(sysRole, sysRoleVO);
+                        SysRoleDTO sysRoleDTO = new SysRoleDTO();
+                        BeanUtils.copyProperties(sysRole, sysRoleDTO);
                         if (CollectionUtils.isNotEmpty(sysRole.getPermissions())) {
-                            List<SysPermissionVO> permissionVOList = Lists.newArrayList();
+                            List<SysPermissionDTO> permissionVOList = Lists.newArrayList();
                             sysRole.getPermissions().forEach(sysPermission -> {
-                                SysPermissionVO permissionVO = new SysPermissionVO();
+                                SysPermissionDTO permissionVO = new SysPermissionDTO();
                                 BeanUtils.copyProperties(sysPermission, permissionVO);
                                 permissionVOList.add(permissionVO);
                             });
-                            sysRoleVO.setPermissions(permissionVOList);
+                            sysRoleDTO.setPermissions(permissionVOList);
                         }
-                        roleVOList.add(sysRoleVO);
+                        roleVOList.add(sysRoleDTO);
                     });
                     sysUserVO.setRoles(roleVOList);
                 }
@@ -107,7 +107,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public void insertOrUpdate(SysUserVO sysUserVO) {
+    public void insertOrUpdate(SysUserDTO sysUserVO) {
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(sysUserVO, sysUser);
         this.sysUserRepository.save(sysUser);
