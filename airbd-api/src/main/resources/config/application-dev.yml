@@ -42,16 +42,6 @@ spring:
     name: AIRBD-API
   banner:
     location: /config/banner.txt
-  resources:
-    static-locations: classpath:/META-INF/resources/,classpath:/resources/static/,classpath:/static/,classpath:/resources/templates/,classpath:/templates/
-  freemarker:
-    suffix: .html  #后缀名，默认是.ftl
-    content-type: text/html
-    enabled: true
-    cache: false #缓存配置
-    template-loader-path: classpath:/templates/
-    charset: UTF-8 #编码格式
-    request-context-attribute: ctx #请求，类似jsp中的内置对象
   datasource:
     druid:
       db1:

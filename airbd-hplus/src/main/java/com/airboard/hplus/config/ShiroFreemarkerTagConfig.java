@@ -1,4 +1,4 @@
-package com.airboard.api.config;
+package com.airboard.hplus.config;
 
 import com.jagregory.shiro.freemarker.ShiroTags;
 import freemarker.template.Configuration;
