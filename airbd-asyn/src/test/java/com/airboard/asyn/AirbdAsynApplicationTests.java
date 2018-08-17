@@ -1,8 +1,7 @@
 package com.airboard.asyn;
 
-import com.airboard.asyn.model.User;
-import com.airboard.asyn.service.HelloSender;
-import com.airboard.asyn.service.TopicSender;
+import com.airboard.asyn.consumer.HelloSender;
+import com.airboard.asyn.consumer.TopicSender;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
