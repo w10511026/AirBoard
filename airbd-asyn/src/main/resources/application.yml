@@ -23,6 +23,3 @@ logging:
   file: airbd-api.log
   level:
     root: info
-
-rabbitmq:
-  queue
