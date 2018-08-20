@@ -55,9 +55,9 @@
         $("button[type=button]").click(function () {
             $.ajax({
                 type: "POST",
-                url: "${ctx.contextPath}/login",
+                url: "${ctxPath}/login",
                 data: $("#loginForm").serialize(),
-                dataType: "json",
+                dataType: "jsonp",
                 success: function(result){
                     if (result.success) {
                         location.href = '${ctx.contextPath}/index';
