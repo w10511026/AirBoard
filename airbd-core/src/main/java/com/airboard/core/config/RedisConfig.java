@@ -36,7 +36,7 @@ public class RedisConfig extends CachingConfigurerSupport {
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(this.timeToLive)
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new JdkSerializationRedisSerializer()))
+                //.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new JdkSerializationRedisSerializer()))
                 .disableCachingNullValues();
 
         RedisCacheManager redisCacheManager = RedisCacheManager.builder(factory)
@@ -54,8 +54,8 @@ public class RedisConfig extends CachingConfigurerSupport {
         redisTemplate.setConnectionFactory(factory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
-        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        //redisTemplate.setHashValueSerializer(new JdkSerializationRedisSerializer());
+        //redisTemplate.setValueSerializer(new JdkSerializationRedisSerializer());
         log.debug("自定义RedisTemplate加载完成");
         return redisTemplate;
     }

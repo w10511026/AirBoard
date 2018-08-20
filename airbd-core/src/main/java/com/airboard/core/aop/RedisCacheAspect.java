@@ -34,7 +34,6 @@ public class RedisCacheAspect {
     @Around("webAspect()")
     public Object redisCache(ProceedingJoinPoint pjp) throws Throwable {
         //得到类名、方法名和参数
-        String redisResult = "";
         String className = pjp.getTarget().getClass().getName();
         String methodName = pjp.getSignature().getName();
         Object[] args = pjp.getArgs();

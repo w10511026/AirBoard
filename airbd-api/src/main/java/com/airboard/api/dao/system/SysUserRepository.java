@@ -1,8 +1,6 @@
 package com.airboard.api.dao.system;
 
 import com.airboard.api.model.system.SysUser;
-import com.airboard.client.dto.system.SysUserDTO;
-import com.airboard.core.annotation.RedisCache;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -15,7 +13,6 @@ import java.util.List;
  */
 public interface SysUserRepository extends JpaRepository<SysUser, Long> {
 
-    @RedisCache(type = SysUserDTO.class)
     List<SysUser> getByUserName(String userName);
 
     List<SysUser> getByUserNameAndPassWord(String userName, String passWord);

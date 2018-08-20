@@ -1,10 +1,5 @@
 package com.airboard.api.service.system.impl;
 
-import com.airboard.client.enums.SysUserSexEnum;
-import com.airboard.client.enums.SysUserStatusEnum;
-import com.airboard.client.enums.SysUserTypeEnum;
-import com.airboard.core.annotation.RedisCache;
-import com.airboard.core.base.BasePage;
 import com.airboard.api.dao.system.SysUserMapper;
 import com.airboard.api.dao.system.SysUserRepository;
 import com.airboard.api.model.system.SysUser;
@@ -12,6 +7,11 @@ import com.airboard.api.service.system.SysUserService;
 import com.airboard.client.dto.system.SysPermissionDTO;
 import com.airboard.client.dto.system.SysRoleDTO;
 import com.airboard.client.dto.system.SysUserDTO;
+import com.airboard.client.enums.SysUserSexEnum;
+import com.airboard.client.enums.SysUserStatusEnum;
+import com.airboard.client.enums.SysUserTypeEnum;
+import com.airboard.core.annotation.RedisCache;
+import com.airboard.core.base.BasePage;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
