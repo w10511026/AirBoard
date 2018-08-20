@@ -56,7 +56,7 @@ public class RedisCacheAspect {
         //得到被代理的方法上的注解
         RedisCache annotation = method.getAnnotation(RedisCache.class);
         Gson gson = new Gson();
-        Object result = pjp.proceed(args);
+        Object result = null;
         if (null == annotation) {
             //方法未设置缓存,正常执行
             result = pjp.proceed(args);

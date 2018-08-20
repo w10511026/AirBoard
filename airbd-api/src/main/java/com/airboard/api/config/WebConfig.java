@@ -18,7 +18,7 @@ import java.util.List;
  * @Description WEB mvc 通用配置
  */
 @Configuration
-public class WebConfig implements WebMvcConfigurer, JsonSerializer<Json> {
+public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
@@ -30,7 +30,7 @@ public class WebConfig implements WebMvcConfigurer, JsonSerializer<Json> {
         return new CurrentUserResolver();
     }
 
-    
+
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(gsonHttpMessageConverter());
@@ -43,6 +43,7 @@ public class WebConfig implements WebMvcConfigurer, JsonSerializer<Json> {
                 .enableComplexMapKeySerialization()
                 .serializeNulls()
                 .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .registerTypeAdapter(Json.class, new SpringfoxJsonToGsonAdapter())
                 .create();
         gsonHttpMessageConverter.setGson(gson);
         //设置中文编码格式
@@ -52,9 +53,15 @@ public class WebConfig implements WebMvcConfigurer, JsonSerializer<Json> {
         return gsonHttpMessageConverter;
     }
 
-    @Override
-    public JsonElement serialize(Json json, Type type, JsonSerializationContext jsonSerializationContext) {
-        final JsonParser parser = new JsonParser();
-        return parser.parse(json.value());
+    /**
+     * @Description: 解决集成Gson导致的swaggerAPI报错问题
+     */
+    class SpringfoxJsonToGsonAdapter implements JsonSerializer<Json> {
+        @Override
+        public JsonElement serialize(Json json, Type type, JsonSerializationContext context) {
+            final JsonParser parser = new JsonParser();
+            return parser.parse(json.value());
+        }
     }
+
 }

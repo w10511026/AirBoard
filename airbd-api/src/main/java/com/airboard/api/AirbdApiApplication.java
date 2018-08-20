@@ -7,17 +7,17 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@Configuration
 @EnableEurekaClient
 @SpringBootApplication
 @ComponentScan("com.airboard")
 @EnableJpaRepositories("com.airboard")
 @EntityScan("com.airboard")
-public class AirbdWebApplication {
+public class AirbdApiApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AirbdWebApplication.class, args);
+        SpringApplication.run(AirbdApiApplication.class, args);
     }
 
 }
