@@ -1,6 +1,7 @@
 package com.airboard.core.aop;
 
 import com.airboard.core.annotation.RedisCache;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -9,6 +10,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -55,13 +59,13 @@ public class RedisCacheAspect {
         if (null == annotation) {
             //方法未设置缓存,正常执行
             result = pjp.proceed(args);
-        }/* else if (!redisTemplate.exists(key)) {
+        } else if (!exists(key)) {
             log.info("########缓存未命中########");
             int cacheTime = annotation.cacheTime();
             //缓存不存在，则调用原方法，并将结果放入缓存中
             result = pjp.proceed(args);
             redisResult = JSON.toJSONString(result);
-            jedisTemplate.set(key, redisResult, cacheTime);
+            redisTemplate.opsForValue().set(key, redisResult, cacheTime);
         } else {
             //缓存命中
             log.info("########缓存命中########");
@@ -74,14 +78,23 @@ public class RedisCacheAspect {
             }
             //得到被代理的方法上的注解
             Class clazz = method.getAnnotation(RedisCache.class).type();
-            redisResult = jedisTemplate.get(key);
+            redisResult = JSON.toJSONString(redisTemplate.opsForValue().get(key));
             if (isCollection) {
                 result = JSON.parseArray(redisResult, clazz);
             } else {
                 result = JSON.parseObject(redisResult, clazz);
             }
-        }*/
+        }
         return result;
+    }
+
+    public boolean exists(final String key) {
+        return (boolean) redisTemplate.execute(new RedisCallback() {
+            @Override
+            public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
+                return connection.exists(key.getBytes());
+            }
+        });
     }
 
     /**
