@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<body>
+<div id="app">
+    <mylist v-for="val in resultlist" v-bind:todo="val" v-bind:key="val.id"></mylist>
+</div>
+</body>
+<script>
+    Vue.component('mylist', {
+        props: ['todo'],
+        template: '<li>{{todo.text}}</li> '
+    })
+
+    var app = new Vue({
+        el: "#app",
+        data: {
+            resultlist: [
+                {id: 1, text: 'hehe'},
+                {id: 2, text: 'vv'}
+            ]
+        }
+    });
+</script>
+</html>
