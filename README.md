@@ -26,7 +26,7 @@ Apache Shiro为权限授权层，Redis对常用数据进行缓存，RabbitMQ实�
 * 前端API展示：Swagger-UI
 * 日志管理：LogBack
 * TOKEN模式： JWT 3.4.0
-* 工具类：Apache Commons、Jackson 2.9.6
+* 工具类：Apache Commons、Gson
 
 2、前端
 
