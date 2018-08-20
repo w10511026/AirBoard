@@ -9,7 +9,7 @@ import java.io.Serializable;
 @ApiModel("权限信息")
 public class SysPermissionDTO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 8342434900746627838L;
 
     private String name;
 

@@ -1,7 +1,7 @@
 package com.airboard.core.aop;
 
 import com.airboard.core.annotation.RedisCache;
-import com.google.gson.Gson;
+import com.airboard.core.base.BaseRedisService;
 import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -10,14 +10,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.RedisCallback;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
 
 /**
  * @Description
@@ -30,9 +25,9 @@ import java.util.Collection;
 public class RedisCacheAspect {
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private BaseRedisService baseRedisService;
 
-    @Pointcut("execution(public * com.airboard.core.service..*.*(..))")
+    @Pointcut("execution(public * com.airboard.api.service..*.*(..))")
     public void webAspect() {
     }
 
@@ -55,49 +50,22 @@ public class RedisCacheAspect {
         Method method = pjp.getTarget().getClass().getMethod(methodSignature.getName(), methodSignature.getParameterTypes());
         //得到被代理的方法上的注解
         RedisCache annotation = method.getAnnotation(RedisCache.class);
-        Gson gson = new Gson();
         Object result = null;
         if (null == annotation) {
             //方法未设置缓存,正常执行
             result = pjp.proceed(args);
-        } else if (!exists(key)) {
+        } else if (!baseRedisService.exists(key)) {
             log.info("########缓存未命中########");
             int cacheTime = annotation.cacheTime();
             //缓存不存在，则调用原方法，并将结果放入缓存中
             result = pjp.proceed(args);
-            redisResult = gson.toJson(result);
-            redisTemplate.opsForValue().set(key, redisResult, cacheTime);
+            baseRedisService.set(key, result, cacheTime);
         } else {
             //缓存命中
             log.info("########缓存命中########");
-            boolean isCollection = true;
-            try {
-                //得到被代理方法的返回值类型,并转换为集合类型，如果可以转换，说明是集合类型
-                method.getReturnType().asSubclass(Collection.class);
-            } catch (ClassCastException e) {
-                isCollection = false;
-            }
-            //得到被代理的方法上的注解
-            //Class clazz = method.getAnnotation(RedisCache.class).type();
-            //得到被代理方法的返回值类型
-            Class returnType = method.getReturnType();
-            redisResult = gson.toJson(redisTemplate.opsForValue().get(key));
-            if (isCollection) {
-                result = gson.fromJson(redisResult, returnType);
-            } else {
-                result = gson.fromJson(redisResult, returnType);
-            }
+            result = baseRedisService.get(key);
         }
         return result;
-    }
-
-    private boolean exists(final String key) {
-        return (boolean) redisTemplate.execute(new RedisCallback() {
-            @Override
-            public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
-                return connection.exists(key.getBytes());
-            }
-        });
     }
 
     /**

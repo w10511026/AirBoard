@@ -10,7 +10,7 @@ import java.util.List;
 @ApiModel("用户角色信息")
 public class SysRoleDTO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -8837495320166713580L;
 
     private String name;
 

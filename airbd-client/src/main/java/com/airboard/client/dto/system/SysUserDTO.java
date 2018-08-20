@@ -10,6 +10,8 @@ import java.util.List;
 @ApiModel("系统用户vo")
 public class SysUserDTO implements Serializable {
 
+    private static final long serialVersionUID = 8556777790990421543L;
+
     private String userName;
     private String passWord;
     private String nickName;
