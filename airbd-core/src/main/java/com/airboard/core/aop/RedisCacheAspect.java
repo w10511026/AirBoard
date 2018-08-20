@@ -1,7 +1,7 @@
 package com.airboard.core.aop;
 
 import com.airboard.core.annotation.RedisCache;
-import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -55,6 +55,7 @@ public class RedisCacheAspect {
         Method method = pjp.getTarget().getClass().getMethod(methodSignature.getName(), methodSignature.getParameterTypes());
         //得到被代理的方法上的注解
         RedisCache annotation = method.getAnnotation(RedisCache.class);
+        Gson gson = new Gson();
         Object result = pjp.proceed(args);
         if (null == annotation) {
             //方法未设置缓存,正常执行
@@ -64,7 +65,7 @@ public class RedisCacheAspect {
             int cacheTime = annotation.cacheTime();
             //缓存不存在，则调用原方法，并将结果放入缓存中
             result = pjp.proceed(args);
-            redisResult = JSON.toJSONString(result);
+            redisResult = gson.toJson(result);
             redisTemplate.opsForValue().set(key, redisResult, cacheTime);
         } else {
             //缓存命中
@@ -77,18 +78,20 @@ public class RedisCacheAspect {
                 isCollection = false;
             }
             //得到被代理的方法上的注解
-            Class clazz = method.getAnnotation(RedisCache.class).type();
-            redisResult = JSON.toJSONString(redisTemplate.opsForValue().get(key));
+            //Class clazz = method.getAnnotation(RedisCache.class).type();
+            //得到被代理方法的返回值类型
+            Class returnType = method.getReturnType();
+            redisResult = gson.toJson(redisTemplate.opsForValue().get(key));
             if (isCollection) {
-                result = JSON.parseArray(redisResult, clazz);
+                result = gson.fromJson(redisResult, returnType);
             } else {
-                result = JSON.parseObject(redisResult, clazz);
+                result = gson.fromJson(redisResult, returnType);
             }
         }
         return result;
     }
 
-    public boolean exists(final String key) {
+    private boolean exists(final String key) {
         return (boolean) redisTemplate.execute(new RedisCallback() {
             @Override
             public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
