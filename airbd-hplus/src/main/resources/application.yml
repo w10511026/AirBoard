@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path:
-    server-path: 127.0.0.1:8088/api
+    server-path: http://localhost:8088/api
   port: 80
 
 spring:
