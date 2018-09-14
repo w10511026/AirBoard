@@ -6,7 +6,6 @@ import com.airboard.client.dto.system.SysUserDTO;
 import com.airboard.client.enums.SysUserSexEnum;
 import com.airboard.client.enums.SysUserStatusEnum;
 import com.airboard.client.enums.SysUserTypeEnum;
-import com.airboard.core.annotation.CurrentUser;
 import com.airboard.core.base.BaseController;
 import com.airboard.core.base.BasePage;
 import com.airboard.core.base.BaseResult;
@@ -18,7 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @Api(tags = "用户服务")
@@ -31,7 +33,7 @@ public class SysUserController extends BaseController {
 
     @ApiOperation(value = "分页列表")
     @GetMapping("/listSysUserPage")
-    public BaseResult listSysUserPage(@CurrentUser @RequestBody SysUserDTO sysUserVO, @RequestBody BasePage basePage) {
+    public BaseResult listSysUserPage(SysUserDTO sysUserVO, BasePage basePage) {
         BaseResult result = new BaseResult();
         try {
             IPage<SysUserDTO> resultPage = sysUserService.listIPageByCondition(basePage, sysUserVO);
