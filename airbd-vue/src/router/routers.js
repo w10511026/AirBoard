@@ -2,7 +2,7 @@ import Main from '@/view/main'
 import parentView from '@/components/parent-view'
 
 /**
- * iview-admin中meta除了原生参数外可配置的参数:
+ * airbd-vue中meta除了原生参数外可配置的参数:
  * meta: {
  *  hideInMenu: (false) 设为true后在左侧菜单不会显示该页面选项
  *  notCache: (false) 设为true后页面不会缓存
@@ -48,7 +48,7 @@ export default [
     name: 'doc',
     meta: {
       title: '文档',
-      href: 'https://lison16.github.io/iview-admin-doc/#/',
+      href: 'https://lison16.github.io/airbd-vue-doc/#/',
       icon: 'ios-book'
     }
   },
