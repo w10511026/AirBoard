@@ -34,8 +34,8 @@ public class SysUserController extends BaseController {
     SysUserService sysUserService;
 
     @ApiOperation(value = "分页列表")
-    @GetMapping("/listSysUserPage")
-    public BaseResult listSysUserPage(@CurrentUser BaseUser baseUser, SysUserDTO sysUserVO, BasePage basePage) {
+    @GetMapping("/listPage")
+    public BaseResult listPage(@CurrentUser BaseUser baseUser, SysUserDTO sysUserVO, BasePage basePage) {
         BaseResult result = new BaseResult();
         try {
             IPage<SysUserDTO> resultPage = sysUserService.listIPageByCondition(basePage, sysUserVO);
@@ -47,13 +47,13 @@ public class SysUserController extends BaseController {
     }
 
     @ApiOperation(value = "查询明细")
-    @GetMapping("/selectById")
-    public BaseResult selectById(Long id, Model model) {
+    @GetMapping("/getById")
+    public BaseResult getById(Long id, Model model) {
         BaseResult result = new BaseResult(true, "操作成功！");
         try {
             SysUserDTO sysUserVO = new SysUserDTO();
             if (NumberUtils.isNotEmpty(id)) {
-                SysUser sysUser = sysUserService.selectById(id);
+                SysUser sysUser = sysUserService.getById(id);
                 BeanUtils.copyProperties(sysUser, sysUserVO);
             }
             result.setData(sysUserVO);
@@ -80,11 +80,11 @@ public class SysUserController extends BaseController {
     }
 
     @ApiOperation(value = "删除")
-    @PostMapping("/delete")
-    public BaseResult delete(Long... id) {
+    @PostMapping("/deleteById")
+    public BaseResult deleteById(Long... id) {
         BaseResult result = new BaseResult(true, "删除成功！");
         try {
-            sysUserService.deleteById(id);
+            sysUserService.removeById(id);
         } catch (Exception e) {
             log.error("sysUser delete -=- {}", e.toString());
         }

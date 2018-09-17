@@ -59,7 +59,7 @@ public class PermissionCollect implements BeanPostProcessor {
                             sysPermission.setType(PermissionTypeEnum.PERMISSION.type);
                         }
                         sysPermission.setUrl(requestUrl);
-                        sysPermissionService.insert(sysPermission);
+                        sysPermissionService.save(sysPermission);
                     }
                 }
             }

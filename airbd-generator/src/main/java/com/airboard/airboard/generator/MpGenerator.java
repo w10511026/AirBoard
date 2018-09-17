@@ -55,7 +55,7 @@ public class MpGenerator {
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setDbType(DbType.MYSQL);
-        dsc.setTypeConvert(new MySqlTypeConvert() {
+        /*dsc.setTypeConvert(new MySqlTypeConvert() {
             // 自定义数据库表字段类型转换【可选】
             @Override
             public DbColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
@@ -63,7 +63,7 @@ public class MpGenerator {
                 // 注意！！processTypeConvert 存在默认类型转换，如果不是你要的效果请自定义返回、非如下直接返回。
                 return super.processTypeConvert(globalConfig, fieldType);
             }
-        });
+        });*/
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername(DB_USERNAME);
         dsc.setPassword(DB_PASSWORD);

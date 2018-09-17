@@ -70,7 +70,7 @@ public class BaseResult<T> implements Serializable {
     }
 
     public void setData(IPage<T> page) {
-        this.total = page.getTotal().intValue();
+        this.total = Math.toIntExact(page.getTotal());
         this.rows = (T) page.getRecords();
         this.setSuccess((T) page.getRecords());
     }

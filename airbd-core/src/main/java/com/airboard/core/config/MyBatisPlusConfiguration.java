@@ -34,7 +34,7 @@ public class MyBatisPlusConfiguration {
     public PaginationInterceptor paginationInterceptor() {
         PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
         // 开启 PageHelper 的支持
-        paginationInterceptor.setLocalPage(true);
+        //paginationInterceptor.setsetLocalPage(true);
         return paginationInterceptor;
     }
 
