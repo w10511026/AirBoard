@@ -213,3 +213,30 @@ export const objEqual = (obj1, obj2) => {
   /* eslint-disable-next-line */
   else return !keysArr1.some(key => obj1[key] != obj2[key])
 }
+
+const format = (timestamp = 0) => {
+  if (timestamp > 0) {
+    let date = new Date()
+    date.setTime(timestamp)
+    let y = date.getFullYear()
+    let m = date.getMonth() + 1
+    m = m < 10 ? ('0' + m) : m
+    let d = date.getDate()
+    d = d < 10 ? ('0' + d) : d
+    let h = date.getHours()
+    h = h < 10 ? ('0' + h) : h
+    let minute = date.getMinutes()
+    let second = date.getSeconds()
+    minute = minute < 10 ? ('0' + minute) : minute
+    second = second < 10 ? ('0' + second) : second
+    return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
+  }
+  return ''
+}
+const getTimestamp = () => {
+  return new Date().valueOf()
+}
+export {
+  format,
+  getTimestamp
+}

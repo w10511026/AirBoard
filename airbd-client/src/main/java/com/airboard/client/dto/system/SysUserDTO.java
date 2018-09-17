@@ -1,5 +1,6 @@
 package com.airboard.client.dto.system;
 
+import com.airboard.client.base.BaseObject;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 @Data
 @ApiModel("系统用户vo")
-public class SysUserDTO implements Serializable {
+public class SysUserDTO extends BaseObject {
 
     private static final long serialVersionUID = 8556777790990421543L;
 

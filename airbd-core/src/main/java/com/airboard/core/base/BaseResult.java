@@ -30,9 +30,6 @@ public class BaseResult<T> implements Serializable {
     @Getter
     @Setter
     private Integer total;
-    @Getter
-    @Setter
-    private T rows;
 
     public BaseResult() {
     }
@@ -64,6 +61,10 @@ public class BaseResult<T> implements Serializable {
         }
     }
 
+    public void setSuccess(Boolean isSuccess) {
+        this.success = isSuccess;
+    }
+
     public void setData(T data) {
         this.data = data;
         this.setSuccess(data);
@@ -71,8 +72,8 @@ public class BaseResult<T> implements Serializable {
 
     public void setData(IPage<T> page) {
         this.total = Math.toIntExact(page.getTotal());
-        this.rows = (T) page.getRecords();
-        this.setSuccess((T) page.getRecords());
+        this.data = (T) page.getRecords();
+        this.setSuccess(true);
     }
 
     @Override

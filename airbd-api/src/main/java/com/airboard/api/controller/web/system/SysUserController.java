@@ -3,9 +3,6 @@ package com.airboard.api.controller.web.system;
 import com.airboard.api.model.system.SysUser;
 import com.airboard.api.service.system.SysUserService;
 import com.airboard.client.dto.system.SysUserDTO;
-import com.airboard.client.enums.SysUserSexEnum;
-import com.airboard.client.enums.SysUserStatusEnum;
-import com.airboard.client.enums.SysUserTypeEnum;
 import com.airboard.core.annotation.CurrentUser;
 import com.airboard.core.base.BaseController;
 import com.airboard.core.base.BasePage;
@@ -57,10 +54,6 @@ public class SysUserController extends BaseController {
                 BeanUtils.copyProperties(sysUser, sysUserVO);
             }
             result.setData(sysUserVO);
-            model.addAttribute("sysUserVO", sysUserVO);
-            model.addAttribute("sysUserTypeEnum", SysUserTypeEnum.values());
-            model.addAttribute("sysUserSexEnum", SysUserSexEnum.values());
-            model.addAttribute("sysUserStatusEnum", SysUserStatusEnum.values());
         } catch (Exception ex) {
             log.error("sysUserAdd -=- {}", ex.toString());
         }
@@ -82,9 +75,10 @@ public class SysUserController extends BaseController {
     @ApiOperation(value = "删除")
     @PostMapping("/deleteById")
     public BaseResult deleteById(Long... id) {
-        BaseResult result = new BaseResult(true, "删除成功！");
+        BaseResult result = new BaseResult("删除成功！");
         try {
-            sysUserService.removeById(id);
+            boolean isSuccess = sysUserService.removeById(id);
+            result.setSuccess(isSuccess);
         } catch (Exception e) {
             log.error("sysUser delete -=- {}", e.toString());
         }

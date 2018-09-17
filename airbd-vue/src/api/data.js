@@ -13,3 +13,13 @@ export const getDragList = () => {
     method: 'get'
   })
 }
+
+/* ------------------------------ 系统管理 ------------------------------ */
+/* * 用户管理  **/
+export const listPageSysUser = () => {
+  return axios.request({
+    url: '/sysUser/listPage',
+    method: 'get'
+  })
+}
+/* ------------------------------ HotSaleProduct ------------------------------ */
