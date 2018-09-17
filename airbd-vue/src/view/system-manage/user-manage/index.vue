@@ -1,12 +1,24 @@
 <template>
   <div>
     <Card>
-      <Form ref="formInline" :model="sysUser">
-        <Input v-model="sysUser.userName" placeholder="Enter name" style="width: auto"><span slot="prepend">登录名</span></Input>
-        <Button class="search-btn" type="primary"><Icon type="search"/>&nbsp;&nbsp;搜索</Button>
+      <Form style="width: 300px">
+        <FormItem>
+          <Row>
+            <Col span="18">
+              <Input type="text" v-model="userName" placeholder="Enter something..."><span slot="prepend">登录名</span></Input>
+            </Col>
+            <Col span="4" offset="1">
+              <Button type="primary" @click="searchList()">搜索</Button>
+            </Col>
+          </Row>
+        </FormItem>
       </Form>
-      <tables ref="tables" editable v-model="tableData" :columns="columns"
-              @on-delete="handleDelete"/>
+      <ButtonGroup>
+        <Button icon="md-add"></Button>
+        <Button icon="md-close"></Button>
+        <Button icon="md-create"></Button>
+      </ButtonGroup>
+      <Table :loading="loading" :data="tableData" :columns="columns" stripe/>
       <div style="margin: 10px 0px; overflow: hidden">
         <Button type="primary" @click="exportExcel">导出为Csv文件</Button>
         <div style="float: right;">
@@ -21,8 +33,8 @@
 import {format} from '@/libs/tools'
 import Tables from '_c/tables'
 import * as apis from '@/api/data'
+
 export default {
-  name: 'tables_page',
   components: {
     Tables
   },
@@ -63,10 +75,15 @@ export default {
       ],
       tableData: [],
       total: 0,
-      sysUser: []
+      loading: true,
+      userName: ''
     }
   },
   methods: {
+    searchList (params) {
+      let id = params.row.id
+      console.log(id)
+    },
     handleDelete (params) {
       let id = params.row.id
       console.log(id)
@@ -88,7 +105,7 @@ export default {
     apis.listPageSysUser().then(res => {
       this.tableData = res.data.data
       this.total = res.data.total
-      this.sysUser = res.data.data
+      this.loading = false
     })
   }
 }
