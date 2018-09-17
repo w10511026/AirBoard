@@ -6,9 +6,11 @@ import com.airboard.client.dto.system.SysUserDTO;
 import com.airboard.client.enums.SysUserSexEnum;
 import com.airboard.client.enums.SysUserStatusEnum;
 import com.airboard.client.enums.SysUserTypeEnum;
+import com.airboard.core.annotation.CurrentUser;
 import com.airboard.core.base.BaseController;
 import com.airboard.core.base.BasePage;
 import com.airboard.core.base.BaseResult;
+import com.airboard.core.base.BaseUser;
 import com.airboard.core.util.NumberUtils;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
@@ -33,7 +35,7 @@ public class SysUserController extends BaseController {
 
     @ApiOperation(value = "分页列表")
     @GetMapping("/listSysUserPage")
-    public BaseResult listSysUserPage(SysUserDTO sysUserVO, BasePage basePage) {
+    public BaseResult listSysUserPage(@CurrentUser BaseUser baseUser, SysUserDTO sysUserVO, BasePage basePage) {
         BaseResult result = new BaseResult();
         try {
             IPage<SysUserDTO> resultPage = sysUserService.listIPageByCondition(basePage, sysUserVO);

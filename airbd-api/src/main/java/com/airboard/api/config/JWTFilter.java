@@ -3,11 +3,13 @@ package com.airboard.api.config;
 import com.airboard.api.service.system.SysUserService;
 import com.airboard.client.dto.system.SysUserDTO;
 import com.airboard.core.base.BaseResult;
+import com.airboard.core.base.BaseUser;
 import com.airboard.core.util.JWTToken;
 import com.airboard.core.util.JWTUtil;
 import com.airboard.core.util.SpringContextHolder;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -75,7 +77,10 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
         }
         List<SysUserDTO> userResult = sysUserService.getByUserName(userName);
         if (CollectionUtils.isNotEmpty(userResult)) {
-            request.setAttribute("currentUser", userResult.get(0));
+            SysUserDTO o = userResult.get(0);
+            BaseUser baseUser = new BaseUser();
+            BeanUtils.copyProperties(o, baseUser);
+            request.setAttribute("currentUser", baseUser);
         }
     }
 
