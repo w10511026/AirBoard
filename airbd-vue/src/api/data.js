@@ -15,11 +15,21 @@ export const getDragList = () => {
 }
 
 /* ------------------------------ 系统管理 ------------------------------ */
-/* * 用户管理  **/
-export const listPageSysUser = () => {
+/* * 系统用户分页列表  **/
+export const listPageSysUser = (param) => {
   return axios.request({
     url: '/sysUser/listPage',
-    method: 'get'
+    method: 'get',
+    params: param
+  })
+}
+
+/* * 删除用户  **/
+export const deleteSysUserByIds = (param) => {
+  return axios.request({
+    url: '/sysUser/deleteByIds',
+    method: 'post',
+    data: param
   })
 }
 /* ------------------------------ HotSaleProduct ------------------------------ */

@@ -13,13 +13,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Api(tags = "用户服务")
@@ -62,10 +60,10 @@ public class SysUserController extends BaseController {
 
     @ApiOperation(value = "新增/修改")
     @PostMapping("/addOrUpdate")
-    public BaseResult addOrUpdate(SysUserDTO sysUserVO) {
+    public BaseResult addOrUpdate(SysUserDTO sysUserDTO) {
         BaseResult result = new BaseResult(true, "操作成功！");
         try {
-            sysUserService.insertOrUpdate(sysUserVO);
+            sysUserService.insertOrUpdate(sysUserDTO);
         } catch (Exception e) {
             log.error("addOrUpdate -=- {}", e.toString());
         }
@@ -73,14 +71,19 @@ public class SysUserController extends BaseController {
     }
 
     @ApiOperation(value = "删除")
-    @PostMapping("/deleteById")
-    public BaseResult deleteById(Long... id) {
+    @PostMapping("/deleteByIds")
+    public BaseResult deleteByIds(@RequestBody Long... ids) {
         BaseResult result = new BaseResult("删除成功！");
         try {
-            boolean isSuccess = sysUserService.removeById(id);
-            result.setSuccess(isSuccess);
+            if (ArrayUtils.isEmpty(ids)) {
+                return new BaseResult("id can't be null！");
+            }
+            for (Long id : ids) {
+                sysUserService.removeById(id);
+            }
         } catch (Exception e) {
             log.error("sysUser delete -=- {}", e.toString());
+            return new BaseResult("删除失败！请重试！");
         }
         return result;
     }

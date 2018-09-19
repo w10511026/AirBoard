@@ -27,7 +27,6 @@ public class SysUserDTO extends BaseObject {
     private Integer cardNo;
     private String salt;
     private List<SysRoleDTO> roles;
-    //秘钥
     private String token;
 
 }

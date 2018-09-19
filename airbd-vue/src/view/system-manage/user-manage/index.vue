@@ -1,31 +1,41 @@
 <template>
   <div>
     <Card>
-      <Form style="width: 300px">
+      <Form style="width: 600px">
         <FormItem>
-          <Row>
-            <Col span="18">
-              <Input type="text" v-model="userName" placeholder="Enter something..."><span slot="prepend">登录名</span></Input>
+          <Row :gutter="16">
+            <Col span="8">
+              <Input type="text" v-model="params.userName" placeholder="登录名"/>
             </Col>
-            <Col span="4" offset="1">
-              <Button type="primary" @click="searchList()">搜索</Button>
+            <Col span="8">
+              <Input type="text" v-model="params.mobile" placeholder="手机"/>
+            </Col>
+            <Col span="8">
+              <ButtonGroup>
+                <Button type="primary" icon="logo-google" @click="handleSearch()">搜索</Button>
+                <Button icon="ios-backspace-outline" @click="handleReset()">重置</Button>
+              </ButtonGroup>
             </Col>
           </Row>
         </FormItem>
       </Form>
-      <ButtonGroup>
-        <Button icon="md-add"></Button>
-        <Button icon="md-close"></Button>
-        <Button icon="md-create"></Button>
-      </ButtonGroup>
-      <Table :loading="loading" :data="tableData" :columns="columns" stripe/>
-      <div style="margin: 10px 0px; overflow: hidden">
-        <Button type="primary" @click="exportExcel">导出为Csv文件</Button>
-        <div style="float: right;">
-          <Page :total="total" :current="1" @on-change="changePage"></Page>
+      <div>
+        <ButtonGroup>
+          <Button icon="md-add" @click="handleAdd">新增</Button>
+          <Button icon="md-close" @click="handleDelete">删除</Button>
+          <Button icon="md-create">修改</Button>
+        </ButtonGroup>
+      </div>
+      <Table ref="tables" :loading="loading" :data="tableData" :columns="columns" highlight-row
+             @on-selection-change="handleSelect" @on-row-dblclick="handleDbClick"/>
+      <div style="overflow: hidden">
+        <Button @click="exportExcel" style="margin: 10px 0px;">导出Csv</Button>
+        <div style="float: right;margin: 10px 0px;">
+          <Page :total="total" :current="params.pageIndex" :page-size="params.pageSize" show-sizer show-total @on-change="handlePage" @on-page-size-change='handlePageSize'></Page>
         </div>
       </div>
     </Card>
+    <MyForm display="showForm" formName="formName"></MyForm>
   </div>
 </template>
 
@@ -33,13 +43,27 @@
 import {format} from '@/libs/tools'
 import Tables from '_c/tables'
 import * as apis from '@/api/data'
+import MyForm from '@/view/system-manage/user-manage/form'
 
 export default {
   components: {
-    Tables
+    Tables,
+    MyForm
   },
   data () {
     return {
+      tableData: [],
+      total: 0,
+      showForm: false,
+      formName: '新增',
+      loading: true,
+      selection: [],
+      params: {
+        pageIndex: 1,
+        pageSize: 10,
+        userName: '',
+        mobile: ''
+      },
       columns: [
         {type: 'selection', width: 60, key: 'id'},
         {title: '登录名称', key: 'userName'},
@@ -50,43 +74,46 @@ export default {
         {title: '邮箱', key: 'email'},
         {title: '状态', key: 'statusZh'},
         {title: '证件', key: 'cardNo'},
-        {title: '创建时间', key: 'createTime', sortable: true, render: (h, params) => { return h('div', format(params.row.createTime)) }},
-        {
-          title: '操作',
-          key: 'handle',
-          options: ['delete'],
-          button: [
-            (h, params, vm) => {
-              return h('Poptip', {
-                props: {
-                  confirm: true,
-                  title: '你确定要删除吗?'
-                },
-                on: {
-                  'on-ok': () => {
-                    vm.$emit('on-delete', params)
-                    vm.$emit('input', params.tableData.filter((item, index) => index !== params.row.initRowIndex))
-                  }
-                }
-              })
-            }
-          ]
-        }
-      ],
-      tableData: [],
-      total: 0,
-      loading: true,
-      userName: ''
+        {title: '创建时间', key: 'createTime', sortable: true, render: (h, params) => { return h('div', format(params.row.createTime)) }}
+      ]
     }
   },
   methods: {
-    searchList (params) {
-      let id = params.row.id
-      console.log(id)
+    handleSearch () {
+      apis.listPageSysUser(this.params).then(res => {
+        this.tableData = res.data.data
+        this.total = res.data.total
+        this.loading = false
+      })
     },
-    handleDelete (params) {
-      let id = params.row.id
-      console.log(id)
+    handleReset () {
+      this.params = {}
+    },
+    handleSelect (selection) {
+      this.selection = selection
+    },
+    handleAdd () {
+      this.showForm = true
+    },
+    handleDelete () {
+      console.info(this.selection)
+      this.$Modal.confirm({
+        title: '确定删除吗？',
+        onOk: () => {
+          let arr = []
+          this.selection.forEach(function (row) {
+            arr.push(row.id)
+          })
+          if (arr.length > 0) {
+            apis.deleteSysUserByIds(arr).then(res => {
+              this.$Message.info(res.data.message)
+              this.handleSearch()
+            }).catch(err => {
+              this.$Message.error(err.message)
+            })
+          }
+        }
+      })
     },
     handleView (params) {
       let id = params.row.id
@@ -97,16 +124,20 @@ export default {
         filename: `table-${(new Date()).valueOf()}.csv`
       })
     },
-    changePage () {
-
+    handlePage (value) {
+      this.params.pageIndex = value
+      this.handleSearch()
+    },
+    handlePageSize (value) {
+      this.params.pageSize = value
+      this.handleSearch()
+    },
+    handleDbClick (value) {
+      console.info(value)
     }
   },
   mounted () {
-    apis.listPageSysUser().then(res => {
-      this.tableData = res.data.data
-      this.total = res.data.total
-      this.loading = false
-    })
+    this.handleSearch()
   }
 }
 </script>
