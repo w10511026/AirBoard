@@ -21,7 +21,7 @@
       </Form>
       <div>
         <ButtonGroup>
-          <Button icon="md-add" @click="handleAdd">新增</Button>
+          <Button icon="md-add" @click="handleOpenForm">新增</Button>
           <Button icon="md-close" @click="handleDelete">删除</Button>
           <Button icon="md-create">修改</Button>
         </ButtonGroup>
@@ -35,7 +35,7 @@
         </div>
       </div>
     </Card>
-    <MyForm display="showForm" formName="formName"></MyForm>
+    <MyForm :display="showStatus" @onOk="handleSaveForm"></MyForm>
   </div>
 </template>
 
@@ -54,8 +54,7 @@ export default {
     return {
       tableData: [],
       total: 0,
-      showForm: false,
-      formName: '新增',
+      showStatus: false,
       loading: true,
       selection: [],
       params: {
@@ -92,8 +91,12 @@ export default {
     handleSelect (selection) {
       this.selection = selection
     },
-    handleAdd () {
-      this.showForm = true
+    handleOpenForm () {
+      this.showStatus = true
+    },
+    handleSaveForm (value) {
+      console.info(value)
+      this.showStatus = false
     },
     handleDelete () {
       console.info(this.selection)
