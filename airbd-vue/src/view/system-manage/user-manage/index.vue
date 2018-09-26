@@ -5,16 +5,16 @@
         <FormItem>
           <Row :gutter="16">
             <Col span="8">
-              <Input type="text" v-model="params.userName" placeholder="登录名"/>
+            <Input type="text" v-model="params.userName" placeholder="登录名"/>
             </Col>
             <Col span="8">
-              <Input type="text" v-model="params.mobile" placeholder="手机"/>
+            <Input type="text" v-model="params.mobile" placeholder="手机"/>
             </Col>
             <Col span="8">
-              <ButtonGroup>
-                <Button type="primary" icon="logo-google" @click="handleSearch()">搜索</Button>
-                <Button icon="ios-backspace-outline" @click="handleReset()">重置</Button>
-              </ButtonGroup>
+            <ButtonGroup>
+              <Button type="primary" icon="logo-google" @click="handleSearch">搜索</Button>
+              <Button icon="ios-backspace-outline" @click="handleReset">重置</Button>
+            </ButtonGroup>
             </Col>
           </Row>
         </FormItem>
@@ -22,8 +22,8 @@
       <div>
         <ButtonGroup>
           <Button icon="md-add" @click="handleOpenForm">新增</Button>
+          <Button icon="md-create" @click="handleOpenForm">修改</Button>
           <Button icon="md-close" @click="handleDelete">删除</Button>
-          <Button icon="md-create">修改</Button>
         </ButtonGroup>
       </div>
       <Table ref="tables" :loading="loading" :data="tableData" :columns="columns" highlight-row
@@ -35,7 +35,7 @@
         </div>
       </div>
     </Card>
-    <MyForm :display="showStatus" @onOk="handleSaveForm"></MyForm>
+    <MyForm v-model="iModal" @refreshTable="handleSearch"/>
   </div>
 </template>
 
@@ -54,7 +54,7 @@ export default {
     return {
       tableData: [],
       total: 0,
-      showStatus: false,
+      iModal: false,
       loading: true,
       selection: [],
       params: {
@@ -92,14 +92,9 @@ export default {
       this.selection = selection
     },
     handleOpenForm () {
-      this.showStatus = true
-    },
-    handleSaveForm (value) {
-      console.info(value)
-      this.showStatus = false
+      this.iModal = true
     },
     handleDelete () {
-      console.info(this.selection)
       this.$Modal.confirm({
         title: '确定删除吗？',
         onOk: () => {

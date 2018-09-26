@@ -12,6 +12,7 @@ import com.airboard.client.enums.SysUserStatusEnum;
 import com.airboard.client.enums.SysUserTypeEnum;
 import com.airboard.core.annotation.RedisCache;
 import com.airboard.core.base.BasePage;
+import com.airboard.core.util.NumberUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -54,9 +55,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             for (SysUser record : page.getRecords()) {
                 SysUserDTO userVO = new SysUserDTO();
                 BeanUtils.copyProperties(record, userVO);
-                userVO.setUserTypeZh(SysUserTypeEnum.getEnumByType(record.getUserType()).name);
-                userVO.setSexZh(SysUserSexEnum.getEnumByType(record.getSex()).name);
-                userVO.setStatusZh(SysUserStatusEnum.getEnumByType(record.getStatus()).name);
+                userVO.setUserTypeZh(NumberUtils.isNotEmpty(record.getUserType()) ?
+                        SysUserTypeEnum.getEnumByType(record.getUserType()).name : "-");
+                userVO.setSexZh(NumberUtils.isNotEmpty(record.getSex()) ?
+                        SysUserSexEnum.getEnumByType(record.getSex()).name : "-");
+                userVO.setStatusZh(NumberUtils.isNotEmpty(record.getStatus()) ?
+                        SysUserStatusEnum.getEnumByType(record.getStatus()).name : "-");
                 sysUserVOList.add(userVO);
             }
             result.setTotal(page.getTotal());

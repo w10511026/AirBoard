@@ -60,7 +60,7 @@ public class SysUserController extends BaseController {
 
     @ApiOperation(value = "新增/修改")
     @PostMapping("/addOrUpdate")
-    public BaseResult addOrUpdate(SysUserDTO sysUserDTO) {
+    public BaseResult addOrUpdate(@RequestBody SysUserDTO sysUserDTO) {
         BaseResult result = new BaseResult(true, "操作成功！");
         try {
             sysUserService.insertOrUpdate(sysUserDTO);

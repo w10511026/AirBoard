@@ -32,7 +32,7 @@ public class SysUser extends BaseObject<SysUser> {
     private String nickName;
     @Column(name = "user_type")
     private Integer userType;
-    private Integer mobile;
+    private Long mobile;
     private Integer sex;
     private String email;
     private Integer status;

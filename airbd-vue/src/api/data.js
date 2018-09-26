@@ -32,4 +32,13 @@ export const deleteSysUserByIds = (param) => {
     data: param
   })
 }
+
+/* * 新增/修改用户  **/
+export const saveSysUser = (param) => {
+  return axios.request({
+    url: '/sysUser/addOrUpdate',
+    method: 'post',
+    data: param
+  })
+}
 /* ------------------------------ HotSaleProduct ------------------------------ */

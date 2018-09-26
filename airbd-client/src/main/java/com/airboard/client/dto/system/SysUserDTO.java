@@ -18,7 +18,7 @@ public class SysUserDTO extends BaseObject {
     private String nickName;
     private Integer userType;
     private String userTypeZh;
-    private Integer mobile;
+    private Long mobile;
     private Integer sex;
     private String sexZh;
     private String email;
