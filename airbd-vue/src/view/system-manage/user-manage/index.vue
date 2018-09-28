@@ -5,10 +5,10 @@
         <FormItem>
           <Row :gutter="16">
             <Col span="8">
-            <Input type="text" v-model="params.userName" placeholder="登录名"/>
+            <Input type="text" v-model="searchParam.userName" placeholder="登录名"/>
             </Col>
             <Col span="8">
-            <Input type="text" v-model="params.mobile" placeholder="手机"/>
+            <Input type="text" v-model="searchParam.mobile" placeholder="手机"/>
             </Col>
             <Col span="8">
             <ButtonGroup>
@@ -27,11 +27,11 @@
         </ButtonGroup>
       </div>
       <Table ref="tables" :loading="loading" :data="tableData" :columns="columns" highlight-row
-             @on-selection-change="handleSelect" @on-row-dblclick="handleDbClick"/>
+             @on-row-dblclick="handleDbClick" @on-current-change="handleSelected"/>
       <div style="overflow: hidden">
         <Button @click="exportExcel" style="margin: 10px 0px;">导出Csv</Button>
         <div style="float: right;margin: 10px 0px;">
-          <Page :total="total" :current="params.pageIndex" :page-size="params.pageSize" show-sizer show-total @on-change="handlePage" @on-page-size-change='handlePageSize'></Page>
+          <Page :total="total" :current="searchParam.pageIndex" :page-size="searchParam.pageSize" show-sizer show-total @on-change="handlePage" @on-page-size-change='handlePageSize'></Page>
         </div>
       </div>
     </Card>
@@ -54,19 +54,19 @@ export default {
     return {
       tableData: [],
       total: 0,
+      loading: true,
+      selection: [],
+      searchParam: {
+        pageIndex: 1,
+        pageSize: 10,
+        userName: '',
+        mobile: ''
+      },
       modalParam: {
         showModal: false,
         operate: 0,
         title: '',
         id: 0
-      },
-      loading: true,
-      selection: [],
-      params: {
-        pageIndex: 1,
-        pageSize: 10,
-        userName: '',
-        mobile: ''
       },
       columns: [
         {type: 'selection', width: 60, key: 'id'},
@@ -78,23 +78,35 @@ export default {
         {title: '邮箱', key: 'email'},
         {title: '状态', key: 'statusZh'},
         {title: '证件', key: 'cardNo'},
-        {title: '创建时间', key: 'createTime', sortable: true, render: (h, params) => { return h('div', format(params.row.createTime)) }}
+        {title: '创建时间', key: 'createTime', sortable: true, render: (h, param) => { return h('div', format(param.row.createTime)) }}
       ]
     }
   },
   methods: {
     handleSearch () {
-      apis.listPageSysUser(this.params).then(res => {
+      apis.listPageSysUser(this.searchParam).then(res => {
         this.tableData = res.data.data
         this.total = res.data.total
         this.loading = false
       })
     },
     handleReset () {
-      this.params = {}
+      this.searchParam = {}
     },
-    handleSelect (selection) {
-      this.selection = selection
+    handleSelected (currentRow) {
+      currentRow._checked === true ? this.selection.splice(this.selection.indexOf(currentRow), 1) : this.selection.push(currentRow)
+      let id = currentRow.id;
+      this.tableData.forEach(function (row) {
+        if (row.id === id) {
+          row._checked = !row._checked
+        }
+      })
+    },
+    handleDbClick (value) {
+      this.modalParam.id = value.id
+      this.modalParam.operate = 0
+      this.modalParam.title = '详情'
+      this.modalParam.showModal = true
     },
     handleEdit () {
       if (this.selection.length <= 0) {
@@ -105,13 +117,16 @@ export default {
         this.$Message.error('只能选择一条数据！')
         return
       }
-      let id = this.selection[0].id
-      this.modalParam.id = id
+      this.modalParam.id = this.selection[0].id
       this.modalParam.operate = 2
       this.modalParam.title = '修改'
       this.modalParam.showModal = true
     },
     handleDelete () {
+      if (this.selection.length <= 0) {
+        this.$Message.error('请选择需要操作的数据！')
+        return
+      }
       this.$Modal.confirm({
         title: '确定删除吗？',
         onOk: () => {
@@ -136,19 +151,12 @@ export default {
       })
     },
     handlePage (value) {
-      this.params.pageIndex = value
+      this.searchParam.pageIndex = value
       this.handleSearch()
     },
     handlePageSize (value) {
-      this.params.pageSize = value
+      this.searchParam.pageSize = value
       this.handleSearch()
-    },
-    handleDbClick (value) {
-      let id = value.id
-      this.modalParam.id = id
-      this.modalParam.operate = 0
-      this.modalParam.title = '详情'
-      this.modalParam.showModal = true
     }
   },
   mounted () {

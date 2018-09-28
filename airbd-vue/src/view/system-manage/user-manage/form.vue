@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modalParam.showModal" title="操作">
+  <Modal v-model="modalParam.showModal" :title="modalParam.title">
     <Form ref="sysUser" :model="sysUser" :rules="ruleValidate" :label-width="70">
       <FormItem label="登录名" prop="userName">
         <Input :disabled="disableStatus" type="text" v-model="sysUser.userName"/>

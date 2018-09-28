@@ -23,6 +23,8 @@ public abstract class BaseObject<T> implements Serializable {
 
     protected Long updateUserId;
 
+    protected Boolean _checked;
+
     public BaseObject() {
         this.createTime = System.currentTimeMillis();
     }
