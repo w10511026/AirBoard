@@ -21,7 +21,7 @@
       </Form>
       <div>
         <ButtonGroup>
-          <Button icon="md-add" @click="modalParam.showModal=true,modalParam.operate=1">新增</Button>
+          <Button icon="md-add" @click="modalParam.showModal=true,modalParam.operate=1,modalParam.title='新增'">新增</Button>
           <Button icon="md-create" @click="handleEdit">修改</Button>
           <Button icon="md-close" @click="handleDelete">删除</Button>
         </ButtonGroup>
