@@ -21,8 +21,8 @@
       </Form>
       <div>
         <ButtonGroup>
-          <Button icon="md-add" @click="handleOpenForm">新增</Button>
-          <Button icon="md-create" @click="handleOpenForm">修改</Button>
+          <Button icon="md-add" @click="showModal=true">新增</Button>
+          <Button icon="md-create" @click="showModal=true">修改</Button>
           <Button icon="md-close" @click="handleDelete">删除</Button>
         </ButtonGroup>
       </div>
@@ -35,7 +35,7 @@
         </div>
       </div>
     </Card>
-    <MyForm v-model="iModal" @refreshTable="handleSearch"/>
+    <MyForm :showModal.sync="showModal" @refreshTable="handleSearch"/>
   </div>
 </template>
 
@@ -54,7 +54,7 @@ export default {
     return {
       tableData: [],
       total: 0,
-      iModal: false,
+      showModal: false,
       loading: true,
       selection: [],
       params: {
@@ -91,9 +91,6 @@ export default {
     handleSelect (selection) {
       this.selection = selection
     },
-    handleOpenForm () {
-      this.iModal = true
-    },
     handleDelete () {
       this.$Modal.confirm({
         title: '确定删除吗？',
@@ -112,10 +109,6 @@ export default {
           }
         }
       })
-    },
-    handleView (params) {
-      let id = params.row.id
-      console.log(id)
     },
     exportExcel () {
       this.$refs.tables.exportCsv({
@@ -139,7 +132,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>
