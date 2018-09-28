@@ -1,45 +1,45 @@
 <template>
-  <Modal v-model="showModal" title="操作">
+  <Modal v-model="modalParam.showModal" title="操作">
     <Form ref="sysUser" :model="sysUser" :rules="ruleValidate" :label-width="70">
       <FormItem label="登录名" prop="userName">
-        <Input type="text" v-model="sysUser.userName"/>
+        <Input :disabled="disableStatus" type="text" v-model="sysUser.userName"/>
       </FormItem>
       <FormItem label="密码" prop="passWord">
-        <Input type="password" v-model="sysUser.passWord"/>
+        <Input :disabled="disableStatus" type="password" v-model="sysUser.passWord"/>
       </FormItem>
-      <FormItem label="昵称">
-        <Input type="text" v-model="sysUser.nickName"/>
+      <FormItem label="昵称" prop="nickName">
+        <Input :disabled="disableStatus" type="text" v-model="sysUser.nickName"/>
       </FormItem>
-      <FormItem label="用户类型">
-        <Select v-model="sysUser.userType" placeholder="请选择用户类型" filterable>
-          <Option value="1">注册用户</Option>
+      <FormItem label="用户类型" prop="userType">
+        <Select :disabled="disableStatus" v-model="sysUser.userType" placeholder="请选择用户类型" filterable>
+          <Option :value="1" :key="1">注册用户</Option>
         </Select>
       </FormItem>
-      <FormItem label="性别">
-        <Select v-model="sysUser.sex" placeholder="请选择性别" filterable>
-          <Option value="1">男</Option>
-          <Option value="2">女</Option>
+      <FormItem label="性别" prop="sex">
+        <Select :disabled="disableStatus" v-model="sysUser.sex" placeholder="请选择性别" filterable>
+          <Option :value="1" :key="1">男</Option>
+          <Option :value="2" :key="2">女</Option>
         </Select>
       </FormItem>
       <FormItem label="手机号" prop="mobile">
-        <Input type="text" v-model="sysUser.mobile"/>
+        <Input :disabled="disableStatus" type="text" v-model="sysUser.mobile"/>
       </FormItem>
-      <FormItem label="邮箱">
-        <Input type="text" v-model="sysUser.email"/>
+      <FormItem label="邮箱" prop="email">
+        <Input :disabled="disableStatus" type="text" v-model="sysUser.email"/>
       </FormItem>
-      <FormItem label="状态">
-        <Select v-model="sysUser.status" placeholder="请选择状态" filterable>
-          <Option value="1">正常</Option>
-          <Option value="2">停用</Option>
+      <FormItem label="状态" prop="status">
+        <Select :disabled="disableStatus" v-model="sysUser.status" placeholder="请选择状态" filterable>
+          <Option :value="1">正常</Option>
+          <Option :value="2">停用</Option>
         </Select>
       </FormItem>
       <FormItem label="证件号" prop="cardNo">
-        <Input type="text" v-model="sysUser.cardNo"/>
+        <Input :disabled="disableStatus" type="text" v-model="sysUser.cardNo"/>
       </FormItem>
     </Form>
     <div slot="footer">
       <Button type="text" size="large" @click="modalCancel('sysUser', 'showModal')">取消</Button>
-      <Button type="primary" size="large" @click="modalOk('sysUser', 'showModal')">确定</Button>
+      <Button :disabled="disableStatus" type="primary" size="large" @click="modalOk('sysUser', 'showModal')">确定</Button>
     </div>
   </Modal>
 </template>
@@ -48,7 +48,7 @@
 import * as apis from '@/api/data'
 export default {
   props: {
-    showModal: Boolean
+    modalParam: Object
   },
   data () {
     const checkMobile = (rule, value, callback) => {
@@ -72,6 +72,7 @@ export default {
       }
     }
     return {
+      disableStatus: false,
       sysUser: {
         userName: '',
         passWord: '',
@@ -117,9 +118,30 @@ export default {
       })
     },
     modalCancel (name, showModal) {
-      let newValue = !this[showModal]
-      this.$emit(`update:${showModal}`, newValue)
+      let newObj = JSON.parse(JSON.stringify(this.modalParam))
+      newObj[showModal] = !newObj[showModal]
+      this.$emit(`update:modalParam`, newObj)
       this.$refs[name].resetFields()
+    }
+  },
+  watch: {
+    'modalParam.showModal': function () {
+      if (this.modalParam.showModal === true) {
+        if (this.modalParam.operate === 0 || this.modalParam.operate === 2) {
+          apis.getSysUserById(this.modalParam.id).then(res => {
+            this.sysUser = res.data.data
+            if (this.modalParam.operate === 0) {
+              this.disableStatus = true
+            } else {
+              this.disableStatus = false
+            }
+          }).catch(err => {
+            this.$Message.error(err.message)
+          })
+        } else {
+          this.disableStatus = false
+        }
+      }
     }
   }
 }

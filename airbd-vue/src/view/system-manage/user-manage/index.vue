@@ -21,8 +21,8 @@
       </Form>
       <div>
         <ButtonGroup>
-          <Button icon="md-add" @click="showModal=true">新增</Button>
-          <Button icon="md-create" @click="showModal=true">修改</Button>
+          <Button icon="md-add" @click="modalParam.showModal=true,modalParam.operate=1">新增</Button>
+          <Button icon="md-create" @click="handleEdit">修改</Button>
           <Button icon="md-close" @click="handleDelete">删除</Button>
         </ButtonGroup>
       </div>
@@ -35,7 +35,7 @@
         </div>
       </div>
     </Card>
-    <MyForm :showModal.sync="showModal" @refreshTable="handleSearch"/>
+    <MyForm :modalParam.sync="modalParam" @refreshTable="handleSearch"/>
   </div>
 </template>
 
@@ -54,7 +54,12 @@ export default {
     return {
       tableData: [],
       total: 0,
-      showModal: false,
+      modalParam: {
+        showModal: false,
+        operate: 0,
+        title: '',
+        id: 0
+      },
       loading: true,
       selection: [],
       params: {
@@ -91,6 +96,21 @@ export default {
     handleSelect (selection) {
       this.selection = selection
     },
+    handleEdit () {
+      if (this.selection.length <= 0) {
+        this.$Message.error('请选择需要操作的数据！')
+        return
+      }
+      if (this.selection.length > 1) {
+        this.$Message.error('只能选择一条数据！')
+        return
+      }
+      let id = this.selection[0].id
+      this.modalParam.id = id
+      this.modalParam.operate = 2
+      this.modalParam.title = '修改'
+      this.modalParam.showModal = true
+    },
     handleDelete () {
       this.$Modal.confirm({
         title: '确定删除吗？',
@@ -124,7 +144,11 @@ export default {
       this.handleSearch()
     },
     handleDbClick (value) {
-      console.info(value)
+      let id = value.id
+      this.modalParam.id = id
+      this.modalParam.operate = 0
+      this.modalParam.title = '详情'
+      this.modalParam.showModal = true
     }
   },
   mounted () {

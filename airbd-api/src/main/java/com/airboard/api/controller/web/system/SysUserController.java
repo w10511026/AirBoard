@@ -43,7 +43,7 @@ public class SysUserController extends BaseController {
 
     @ApiOperation(value = "查询明细")
     @GetMapping("/getById")
-    public BaseResult getById(Long id, Model model) {
+    public BaseResult getById(Long id) {
         BaseResult result = new BaseResult(true, "操作成功！");
         try {
             SysUserDTO sysUserVO = new SysUserDTO();

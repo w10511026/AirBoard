@@ -24,6 +24,17 @@ export const listPageSysUser = (param) => {
   })
 }
 
+/* * 系统用户查询详情  **/
+export const getSysUserById = (param) => {
+  return axios.request({
+    url: '/sysUser/getById',
+    method: 'get',
+    params: {
+      id: param
+    }
+  })
+}
+
 /* * 删除用户  **/
 export const deleteSysUserByIds = (param) => {
   return axios.request({
