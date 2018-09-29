@@ -95,7 +95,7 @@ export default {
     },
     handleSelected (currentRow) {
       currentRow._checked === true ? this.selection.splice(this.selection.indexOf(currentRow), 1) : this.selection.push(currentRow)
-      let id = currentRow.id;
+      let id = currentRow.id
       this.tableData.forEach(function (row) {
         if (row.id === id) {
           row._checked = !row._checked
