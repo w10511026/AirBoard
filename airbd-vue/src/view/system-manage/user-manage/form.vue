@@ -36,6 +36,12 @@
       <FormItem label="证件号" prop="cardNo">
         <Input :disabled="disableStatus" type="text" v-model="sysUser.cardNo"/>
       </FormItem>
+      <FormItem label="创建人" prop="createUserId" :hidden="showStatus">
+        <Input :disabled="disableStatus" type="text" v-model="sysUser.createUserId"/>
+      </FormItem>
+      <FormItem label="创建时间" prop="createTime" :hidden="showStatus">
+        <Input :disabled="disableStatus" type="text" v-model="sysUser.createTime"/>
+      </FormItem>
     </Form>
     <div slot="footer">
       <Button type="text" size="large" @click="modalCancel('sysUser', 'showModal')">取消</Button>
@@ -72,6 +78,7 @@ export default {
       }
     }
     return {
+      showStatus: false,
       disableStatus: false,
       sysUser: {
         userName: '',
@@ -132,14 +139,17 @@ export default {
             this.sysUser = res.data.data
             if (this.modalParam.operate === 0) {
               this.disableStatus = true
+              this.showStatus = false
             } else {
               this.disableStatus = false
+              this.showStatus = true
             }
           }).catch(err => {
             this.$Message.error(err.message)
           })
         } else {
           this.disableStatus = false
+          this.showStatus = true
         }
       }
     }
